@@ -24,7 +24,7 @@ const AGB = () => {
           content="Allgemeine Geschäftsbedingungen für die Nutzung von TierTarif sowie Hinweise zu eingebundenen Vergleichsrechnern, Formularen und externen Partnerdiensten."
         />
         <link rel="canonical" href={buildAbsoluteSiteUrl("/agb")} />
-        <meta name="robots" content="noindex, follow" />
+        <meta name="robots" content="index, follow" />
       </Helmet>
 
       <Header />

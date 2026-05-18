@@ -13,7 +13,7 @@ const Datenschutz = () => {
         <title>Datenschutzerklärung | TierTarif</title>
         <meta name="description" content="Informationen zum Datenschutz auf TierTarif. Wie wir deine Daten schützen." />
         <link rel="canonical" href={buildAbsoluteSiteUrl("/datenschutz")} />
-        <meta name="robots" content="noindex, follow" />
+        <meta name="robots" content="index, follow" />
       </Helmet>
 
       <Header />

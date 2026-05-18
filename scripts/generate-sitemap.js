@@ -58,6 +58,10 @@ async function generateSitemap() {
       if (source.table === 'categories') {
           query = query.eq('is_active', true);
       }
+
+      if (source.table === 'forum_threads') {
+          query = query.eq('is_active', true).eq('status', 'published');
+      }
       
       const { data, error } = await query;
 

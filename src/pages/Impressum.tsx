@@ -13,7 +13,7 @@ const Impressum = () => {
         <title>Impressum | TierTarif</title>
         <meta name="description" content="Impressum und rechtliche Hinweise von TierTarif." />
         <link rel="canonical" href={buildAbsoluteSiteUrl("/impressum")} />
-        <meta name="robots" content="noindex, follow" />
+        <meta name="robots" content="index, follow" />
       </Helmet>
 
       <Header />

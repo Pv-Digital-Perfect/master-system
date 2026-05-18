@@ -337,6 +337,11 @@ export default function Forum() {
     );
   }, [searchQuery, threads]);
 
+  const publicCategories = useMemo(
+    () => categories.filter((category) => Number(category.thread_count) > 0),
+    [categories],
+  );
+
   const metaTitle = selectedCategory
     ? truncate(`${selectedCategory.name} Forum & Ratgeber | TierTarif`, 60)
     : DEFAULT_META_TITLE;
@@ -357,7 +362,7 @@ export default function Forum() {
 
   const isInitialLoading = categoriesLoading || threadsLoading;
   const hasInvalidCategory = Boolean(categorySlug) && !categoriesLoading && !selectedCategory;
-  const totalCategoryCount = categories.length;
+  const totalCategoryCount = publicCategories.length;
   const totalLoadedThreadCount = filteredThreads.length;
   const totalPublishedThreadCount = threads.length;
   const shouldIndexForumPage = selectedCategory
@@ -569,7 +574,7 @@ export default function Forum() {
                     ref={categoryScrollerRef}
                     className="scrollbar-none flex gap-2 overflow-x-auto scroll-smooth px-1 py-1"
                   >
-                    {categories.map((category) => {
+                    {publicCategories.map((category) => {
                       const isActive = category.slug === selectedCategory?.slug;
 
                       return (
@@ -658,7 +663,7 @@ export default function Forum() {
                 <CardContent className="p-6">
                   <h2 className="text-lg font-black tracking-tight text-[#0A0F1C]">Kategorien</h2>
                   <div className="mt-4 space-y-3">
-                    {categories.map((category) => (
+                    {publicCategories.map((category) => (
                       <Link
                         key={category.id}
                         to={getForumCategoryRoute(category.slug)}
