@@ -249,6 +249,8 @@ export const BigThreeSection = () => {
 
   if (!content || items.length === 0) return null;
 
+  const showDesktopSliderControls = items.length > 3;
+
   const scrollSlider = (direction: "prev" | "next") => {
     const slider = sliderRef.current;
     if (!slider) return;
@@ -335,15 +337,17 @@ export const BigThreeSection = () => {
           </p>
         </div>
 
-        <div className="relative -mx-4 px-4 md:mx-0 md:px-0">
-          <button
-            type="button"
-            onClick={() => scrollSlider("prev")}
-            className="tt-coral-shine absolute -left-5 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full text-secondary-foreground transition-all duration-300 hover:-translate-x-0.5 focus:outline-none focus:ring-2 focus:ring-primary/30 lg:flex"
-            aria-label="Vorherige Vergleichskategorie anzeigen"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
+        <div className={`relative -mx-4 px-4 md:mx-0 ${showDesktopSliderControls ? "lg:px-20" : "md:px-0"}`}>
+          {showDesktopSliderControls && (
+            <button
+              type="button"
+              onClick={() => scrollSlider("prev")}
+              className="tt-coral-shine absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full text-secondary-foreground transition-all duration-300 hover:-translate-x-0.5 focus:outline-none focus:ring-2 focus:ring-primary/30 lg:flex"
+              aria-label="Vorherige Vergleichskategorie anzeigen"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+          )}
 
           <div
             ref={sliderRef}
@@ -428,14 +432,16 @@ export const BigThreeSection = () => {
             })}
           </div>
 
-          <button
-            type="button"
-            onClick={() => scrollSlider("next")}
-            className="tt-coral-shine absolute -right-5 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full text-secondary-foreground transition-all duration-300 hover:translate-x-0.5 focus:outline-none focus:ring-2 focus:ring-primary/30 lg:flex"
-            aria-label="Nächste Vergleichskategorie anzeigen"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
+          {showDesktopSliderControls && (
+            <button
+              type="button"
+              onClick={() => scrollSlider("next")}
+              className="tt-coral-shine absolute right-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full text-secondary-foreground transition-all duration-300 hover:translate-x-0.5 focus:outline-none focus:ring-2 focus:ring-primary/30 lg:flex"
+              aria-label="Nächste Vergleichskategorie anzeigen"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          )}
 
           <div className="pointer-events-none absolute inset-y-0 right-4 w-10 bg-gradient-to-l from-white to-transparent md:right-0 md:w-14" />
         </div>

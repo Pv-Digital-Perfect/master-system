@@ -1896,6 +1896,53 @@ export default function AdminSettings() {
                   </AccordionContent>
                 </AccordionItem>
 
+                <AccordionItem value="forum">
+                  <AccordionTrigger className="font-semibold">Neueste Magazin-Beiträge</AccordionTrigger>
+                  <AccordionContent className="space-y-4 pt-4">
+                    <div className="rounded-xl border border-secondary/20 bg-secondary/5 p-4">
+                      <p className="text-sm font-semibold text-primary">Startseiten-Slider für veröffentlichte Magazin-/Forum-Beiträge</p>
+                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                        Der Slider lädt automatisch Beiträge aus <code>forum_threads</code> mit <code>is_active = true</code> und <code>status = published</code>. Sichtbarkeit und Position steuerst du oben im Struktur Manager.
+                      </p>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Badge Text</Label>
+                        <Input value={localContent.forum?.badge || ""} onChange={e => updateContent("forum", "badge", e.target.value)} placeholder="Ratgeber & Magazin" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Headline</Label>
+                        <Input value={localContent.forum?.headline || ""} onChange={e => updateContent("forum", "headline", e.target.value)} placeholder="Neueste Magazin-Beiträge" />
+                      </div>
+                      <div className="space-y-2 md:col-span-2">
+                        <Label>Subheadline</Label>
+                        <Textarea rows={2} value={localContent.forum?.subheadline || ""} onChange={e => updateContent("forum", "subheadline", e.target.value)} placeholder="Aktuelle Ratgeber zu Tierversicherungen..." />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Anzahl Beiträge im Slider</Label>
+                        <Input type="number" min={1} max={24} value={localContent.forum?.count || 12} onChange={e => updateContent("forum", "count", parseInt(e.target.value) || 12)} />
+                        <p className="text-xs text-muted-foreground">Empfohlen: 6–12. Technisch begrenzt auf 24.</p>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Button Text oben / mobil</Label>
+                        <Input value={localContent.forum?.button_text || ""} onChange={e => updateContent("forum", "button_text", e.target.value)} placeholder="Alle Beiträge ansehen" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Button Link oben / mobil</Label>
+                        <Input value={localContent.forum?.button_url || ""} onChange={e => updateContent("forum", "button_url", e.target.value)} placeholder="/forum" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Button Text auf Karte</Label>
+                        <Input value={localContent.forum?.read_more || ""} onChange={e => updateContent("forum", "read_more", e.target.value)} placeholder="Artikel lesen" />
+                      </div>
+                      <div className="space-y-2 md:col-span-2">
+                        <Label>Fallback-Text für Karten ohne Beschreibung</Label>
+                        <Textarea rows={2} value={localContent.forum?.fallback_description || ""} onChange={e => updateContent("forum", "fallback_description", e.target.value)} placeholder="Lies den ganzen Beitrag im TierTarif Magazin." />
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="home_faq">
                   <AccordionTrigger className="font-semibold">FAQ Startseite</AccordionTrigger>
                   <AccordionContent className="pt-4">

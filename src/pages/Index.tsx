@@ -6,6 +6,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { BigThreeSection } from "@/components/home/BigThreeSection";
 import { CategoriesSection } from "@/components/home/CategoriesSection";
 import { NewsSection } from "@/components/home/NewsSection";
+import { ForumSection } from "@/components/home/ForumSection";
 import { ScrollToTop } from "@/components/ui/ScrollToTop";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { useGlobalAnalyticsCode } from "@/hooks/useGlobalAnalytics";
@@ -143,6 +144,7 @@ const Index = () => {
     hero: <HeroSection />,
     how_it_works: <HowItWorksSection />,
     news: <NewsSection />,
+    forum: <ForumSection />,
     big_three: <BigThreeSection />,
     categories: <CategoriesSection />,
     home_faq: <FaqSection />,

@@ -285,12 +285,13 @@ export function useActiveTheme() {
 
 export const defaultHomeSections: HomeSection[] = [
   { id: "hero", label: "Hero", enabled: true, order: 0 },
-  { id: "how_it_works", label: "So funktioniert TierTarif", enabled: true, order: 1 },
-  { id: "big_three", label: "Unsere Schwerpunkte", enabled: true, order: 2 },
-  { id: "news", label: "Vergleiche / Vorschau-Karten", enabled: true, order: 3 },
-  { id: "categories", label: "Vergleiche direkt öffnen", enabled: true, order: 4 },
-  { id: "home_faq", label: "FAQ Startseite", enabled: true, order: 5 },
+  { id: "news", label: "Vergleiche / Vorschau-Karten", enabled: true, order: 1 },
+  { id: "forum", label: "Neueste Magazin-Beiträge", enabled: true, order: 2 },
+  { id: "how_it_works", label: "So funktioniert TierTarif", enabled: true, order: 3 },
+  { id: "big_three", label: "Unsere Schwerpunkte", enabled: true, order: 4 },
+  { id: "categories", label: "Vergleiche direkt öffnen", enabled: true, order: 5 },
   { id: "seo", label: "Unsere Mission / SEO-Text", enabled: true, order: 6 },
+  { id: "home_faq", label: "FAQ Startseite", enabled: true, order: 7 },
 ];
 
 export const defaultHomeLayout = {
@@ -300,6 +301,7 @@ export const defaultHomeLayout = {
   why_us: true,
   categories: true,
   news: true,
+  forum: true,
   forum_teaser: false,
   ads: false,
   seo_text: true
@@ -400,6 +402,16 @@ export const defaultHomeContent = {
   },
   categories: { headline: "Alle TierTarif-Bereiche im Überblick", count: 6, button_more: "Alle Kategorien anzeigen", button_card: "Bereich erkunden" },
   news: { headline: "Beliebte Vergleiche", subheadline: "Aktive TierTarif-Vergleiche", count: 3, button_text: "Alle Vergleiche ansehen", button_url: "/kategorien", read_more: "Vergleich öffnen" },
+  forum: {
+    badge: "Ratgeber & Magazin",
+    headline: "Neueste Magazin-Beiträge",
+    subheadline: "Aktuelle Ratgeber zu Tierversicherungen, Tierarztkosten, OP-Schutz und Tarifdetails für Hund, Katze und Pferd.",
+    count: 12,
+    button_text: "Alle Beiträge ansehen",
+    button_url: "/forum",
+    read_more: "Artikel lesen",
+    fallback_description: "Lies den ganzen Beitrag im TierTarif Magazin.",
+  },
   forum_teaser: { headline: "Tierhalter-Community", subheadline: "Tausche dich mit anderen Tierhaltern aus und teile Erfahrungen rund um Hunde, Katzen und Versicherungsschutz.", link_text: "Alle Foren anzeigen", mobile_button: "Zur Community" }
 };
 
@@ -524,6 +536,36 @@ function createHomeSection(sectionId: string) {
 
 export const HOME_SECTION_IDS = new Set(defaultHomeSections.map((section) => section.id));
 
+const HOME_SECTION_INSERT_AFTER: Partial<Record<string, string>> = {
+  forum: "news",
+};
+
+function insertMissingHomeSection(sections: HomeSection[], section: HomeSection) {
+  const preferredPreviousId = HOME_SECTION_INSERT_AFTER[section.id];
+
+  if (preferredPreviousId) {
+    const preferredIndex = sections.findIndex((entry) => entry.id === preferredPreviousId);
+    if (preferredIndex >= 0) {
+      sections.splice(preferredIndex + 1, 0, { ...section });
+      return;
+    }
+  }
+
+  const defaultIndex = defaultHomeSections.findIndex((entry) => entry.id === section.id);
+
+  for (let index = defaultIndex - 1; index >= 0; index -= 1) {
+    const previousDefaultId = defaultHomeSections[index]?.id;
+    const previousCurrentIndex = sections.findIndex((entry) => entry.id === previousDefaultId);
+
+    if (previousCurrentIndex >= 0) {
+      sections.splice(previousCurrentIndex + 1, 0, { ...section });
+      return;
+    }
+  }
+
+  sections.push({ ...section });
+}
+
 function normalizeHomeSectionsValue(rawSections?: HomeSection[] | null): HomeSection[] {
   const savedSections = Array.isArray(rawSections) ? rawSections : [];
 
@@ -545,7 +587,7 @@ function normalizeHomeSectionsValue(rawSections?: HomeSection[] | null): HomeSec
 
   defaultHomeSections.forEach((defaultSection) => {
     if (!sortedSavedSections.some((section) => section.id === defaultSection.id)) {
-      sortedSavedSections.push({ ...defaultSection });
+      insertMissingHomeSection(sortedSavedSections, defaultSection);
     }
   });
 
@@ -600,6 +642,7 @@ export function useHomeLayout() {
       why_us: sections.find((section) => section.id === "how_it_works")?.enabled ?? true,
       categories: sections.find((section) => section.id === "categories")?.enabled ?? true,
       news: sections.find((section) => section.id === "news")?.enabled ?? true,
+      forum: sections.find((section) => section.id === "forum")?.enabled ?? true,
       forum_teaser: false,
       ads: false,
       seo_text: sections.find((section) => section.id === "seo")?.enabled ?? true,
@@ -679,6 +722,9 @@ export function useHomeContent() {
     content.categories = { ...defaultHomeContent.categories, ...content.categories }; 
     content.news = { ...defaultHomeContent.news, ...content.news }; 
     content.news.button_url = normalizeNavigableHref(String(content.news.button_url || defaultHomeContent.news.button_url || getCategoriesRoute()));
+    content.forum = { ...defaultHomeContent.forum, ...(content.forum || {}) };
+    content.forum.button_url = normalizeNavigableHref(String(content.forum.button_url || defaultHomeContent.forum.button_url || "/forum"));
+    content.forum.count = Math.max(1, Math.min(24, Number(content.forum.count) || defaultHomeContent.forum.count));
     content.trust = { ...defaultHomeContent.trust, ...content.trust }; 
     content.mission = { ...defaultHomeContent.mission, ...(content.mission || {}) };
     content.hero = { ...defaultHomeContent.hero, ...content.hero };
