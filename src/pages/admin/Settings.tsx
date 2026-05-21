@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 import type { Json } from "@/integrations/supabase/types";
 import { Switch } from "@/components/ui/switch";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, supabaseAnonKey, supabaseUrl } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -287,12 +287,39 @@ export default function AdminSettings() {
     setIsGeneratingSitemap(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('generate-sitemap');
+      if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error("Supabase URL oder Publishable Key fehlt im Frontend-Build.");
+      }
 
-      if (error) throw error;
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) throw sessionError;
 
-      if (!data?.success) {
-        throw new Error(data?.error || data?.message || 'Sitemap konnte nicht generiert werden.');
+      const accessToken = sessionData.session?.access_token;
+      if (!accessToken) {
+        throw new Error("Kein aktiver Admin-Login gefunden. Bitte neu einloggen.");
+      }
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/generate-sitemap`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": supabaseAnonKey,
+          "Authorization": `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ source: "tiertarif-admin" }),
+      });
+
+      const responseText = await response.text();
+      let data: any = null;
+
+      try {
+        data = responseText ? JSON.parse(responseText) : null;
+      } catch {
+        data = { success: false, error: responseText || "Keine JSON-Antwort von der Edge Function." };
+      }
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.error || data?.message || `Sitemap konnte nicht generiert werden. HTTP ${response.status}`);
       }
 
       toast({

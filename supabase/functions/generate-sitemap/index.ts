@@ -6,7 +6,6 @@ import {
   getCategoryRoute,
   getForumIndexRoute,
   getForumThreadRoute,
-  getProjectRoute,
   normalizeRoutePath,
 } from "../_shared/routes.ts";
 
@@ -21,6 +20,7 @@ const BUCKET_NAME = "seo-assets";
 const SITEMAP_PATH = "sitemap.xml";
 const ABOUT_PAGE_SETTING_KEY = "about_page_content";
 const DEFAULT_ABOUT_SLUG = "ueber-uns";
+const XML_CONTENT_TYPE = "application/xml";
 
 function json(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -29,12 +29,15 @@ function json(data: unknown, status = 200) {
   });
 }
 
-function getEnv(name: string) {
-  const value = Deno.env.get(name)?.trim();
-  if (!value) {
-    throw new Error(`Missing environment variable: ${name}`);
+function getEnv(name: string, aliases: string[] = []) {
+  const keys = [name, ...aliases];
+
+  for (const key of keys) {
+    const value = Deno.env.get(key)?.trim();
+    if (value) return value;
   }
-  return value;
+
+  throw new Error(`Missing environment variable: ${keys.join(" or ")}`);
 }
 
 function escapeXml(value: string) {
@@ -63,8 +66,6 @@ function getBooleanValue(value: unknown, fallback: boolean): boolean {
 }
 
 function getAboutPagePath(value: unknown): string | null {
-  // Wenn der Admin-Setting-Eintrag fehlt, ist /ueber-uns trotzdem eine echte React-Route.
-  // Deshalb wird der Default-Slug bewusst aufgenommen, statt die Seite aus der Sitemap zu verlieren.
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return normalizeRoutePath(DEFAULT_ABOUT_SLUG);
   }
@@ -80,12 +81,26 @@ function getAboutPagePath(value: unknown): string | null {
   return normalizeRoutePath(slug);
 }
 
-async function ensureAdminUser(supabaseUrl: string, supabaseAnonKey: string, serviceRoleKey: string, authHeader: string) {
+function isAdminRole(row: Record<string, unknown>) {
+  return String(row.role || "").toUpperCase() === "ADMIN";
+}
+
+async function ensureAdminUser(
+  supabaseUrl: string,
+  supabaseAnonKey: string,
+  serviceRoleKey: string,
+  authHeader: string,
+) {
   const userClient = createClient(supabaseUrl, supabaseAnonKey, {
     global: {
       headers: {
         Authorization: authHeader,
       },
+    },
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
     },
   });
 
@@ -95,33 +110,47 @@ async function ensureAdminUser(supabaseUrl: string, supabaseAnonKey: string, ser
   } = await userClient.auth.getUser();
 
   if (userError || !user) {
-    throw new Error("Unauthorized");
+    throw new Error(`Unauthorized: ${userError?.message || "No authenticated user"}`);
   }
 
-  const adminClient = createClient(supabaseUrl, serviceRoleKey);
+  const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
 
-  const { data: roleRow } = await adminClient
+  const { data: roleRows, error: roleError } = await adminClient
     .from("user_roles")
-    .select("id")
+    .select("role")
     .eq("user_id", user.id)
-    .eq("role", "ADMIN")
-    .maybeSingle();
+    .limit(10);
 
-  if (roleRow) {
+  if (roleError) {
+    throw new Error(`Admin role check failed: ${roleError.message}`);
+  }
+
+  if ((roleRows || []).some((row: Record<string, unknown>) => isAdminRole(row))) {
     return { user, adminClient };
   }
 
-  const { data: profileRow } = await adminClient
-    .from("profiles")
-    .select("id, is_admin")
-    .eq("id", user.id)
-    .maybeSingle();
+  // Fallback für ältere Builds, falls das Projekt zusätzlich profiles.is_admin verwendet.
+  try {
+    const { data: profileRow, error: profileError } = await adminClient
+      .from("profiles")
+      .select("is_admin")
+      .eq("id", user.id)
+      .maybeSingle();
 
-  if (!profileRow?.is_admin) {
-    throw new Error("Forbidden");
+    if (!profileError && profileRow?.is_admin) {
+      return { user, adminClient };
+    }
+  } catch (_) {
+    // Kein harter Fehler: user_roles ist die maßgebliche Admin-Quelle.
   }
 
-  return { user, adminClient };
+  throw new Error("Forbidden: authenticated user is not ADMIN");
 }
 
 type UrlEntry = {
@@ -142,19 +171,9 @@ function addUrl(
   if (!normalizedPath) return;
 
   const existing = map.get(normalizedPath);
-  if (!existing) {
+  if (!existing || existing.lastmod < lastmod) {
     map.set(normalizedPath, {
       path: normalizedPath,
-      lastmod,
-      changefreq,
-      priority,
-    });
-    return;
-  }
-
-  if (existing.lastmod < lastmod) {
-    map.set(normalizedPath, {
-      ...existing,
       lastmod,
       changefreq,
       priority,
@@ -165,21 +184,33 @@ function addUrl(
 async function ensurePublicBucket(adminClient: ReturnType<typeof createClient>) {
   const { data: buckets, error: bucketsError } = await adminClient.storage.listBuckets();
   if (bucketsError) {
-    throw bucketsError;
+    throw new Error(`Storage bucket list failed: ${bucketsError.message}`);
   }
 
   const exists = (buckets ?? []).some((bucket) => bucket.name === BUCKET_NAME || bucket.id === BUCKET_NAME);
-  if (exists) {
+
+  if (!exists) {
+    const { error: createBucketError } = await adminClient.storage.createBucket(BUCKET_NAME, {
+      public: true,
+      fileSizeLimit: 5 * 1024 * 1024,
+      allowedMimeTypes: [XML_CONTENT_TYPE, "text/xml"],
+    });
+
+    if (createBucketError && !createBucketError.message.toLowerCase().includes("already exists")) {
+      throw new Error(`Storage bucket create failed: ${createBucketError.message}`);
+    }
+
     return;
   }
 
-  const { error: createBucketError } = await adminClient.storage.createBucket(BUCKET_NAME, {
+  const { error: updateBucketError } = await adminClient.storage.updateBucket(BUCKET_NAME, {
     public: true,
-    fileSizeLimit: "5MB",
+    fileSizeLimit: 5 * 1024 * 1024,
+    allowedMimeTypes: [XML_CONTENT_TYPE, "text/xml"],
   });
 
-  if (createBucketError && !createBucketError.message.toLowerCase().includes("already exists")) {
-    throw createBucketError;
+  if (updateBucketError) {
+    throw new Error(`Storage bucket update failed: ${updateBucketError.message}`);
   }
 }
 
@@ -199,8 +230,8 @@ Deno.serve(async (req) => {
     }
 
     const supabaseUrl = getEnv("SUPABASE_URL");
-    const supabaseAnonKey = getEnv("SUPABASE_ANON_KEY");
-    const serviceRoleKey = getEnv("SUPABASE_SERVICE_ROLE_KEY");
+    const supabaseAnonKey = getEnv("SUPABASE_ANON_KEY", ["SUPABASE_PUBLISHABLE_KEY"]);
+    const serviceRoleKey = getEnv("SUPABASE_SERVICE_ROLE_KEY", ["SERVICE_ROLE_KEY"]);
     const siteUrl = Deno.env.get("SITE_URL")?.trim() || DEFAULT_SITE_URL;
 
     const { adminClient } = await ensureAdminUser(
@@ -210,13 +241,9 @@ Deno.serve(async (req) => {
       authHeader,
     );
 
-    const [categoriesResult, projectsResult, forumThreadsResult, aboutPageResult] = await Promise.all([
+    const [categoriesResult, forumThreadsResult, aboutPageResult] = await Promise.all([
       adminClient
         .from("categories")
-        .select("slug, updated_at, created_at")
-        .eq("is_active", true),
-      adminClient
-        .from("projects")
         .select("slug, updated_at, created_at")
         .eq("is_active", true),
       adminClient
@@ -231,10 +258,9 @@ Deno.serve(async (req) => {
         .maybeSingle(),
     ]);
 
-    if (categoriesResult.error) throw categoriesResult.error;
-    if (projectsResult.error) throw projectsResult.error;
-    if (forumThreadsResult.error) throw forumThreadsResult.error;
-    if (aboutPageResult.error) throw aboutPageResult.error;
+    if (categoriesResult.error) throw new Error(`Categories query failed: ${categoriesResult.error.message}`);
+    if (forumThreadsResult.error) throw new Error(`Forum threads query failed: ${forumThreadsResult.error.message}`);
+    if (aboutPageResult.error) throw new Error(`About page query failed: ${aboutPageResult.error.message}`);
 
     const urlMap = new Map<string, UrlEntry>();
     const today = getIsoDate();
@@ -247,7 +273,6 @@ Deno.serve(async (req) => {
     addUrl(urlMap, "/datenschutz", today, "monthly", "0.3");
     addUrl(urlMap, "/agb", today, "monthly", "0.3");
     addUrl(urlMap, "/wie-wir-vergleichen", today, "monthly", "0.5");
-    addUrl(urlMap, "/top-apps", today, "weekly", "0.6");
 
     const aboutPath = getAboutPagePath(aboutPageResult.data?.value ?? null);
     if (aboutPath) {
@@ -266,17 +291,8 @@ Deno.serve(async (req) => {
       addUrl(urlMap, getCategoryRoute(slug), getIsoDate(category.updated_at ?? category.created_at), "weekly", "0.8");
     }
 
-    for (const project of projectsResult.data ?? []) {
-      const slug = String(project.slug ?? "").trim();
-      if (!slug) continue;
-
-      const projectRoute = getProjectRoute(slug);
-      if (projectRoute.startsWith("/go/")) {
-        continue;
-      }
-
-      addUrl(urlMap, projectRoute, getIsoDate(project.updated_at ?? project.created_at), "weekly", "0.6");
-    }
+    // Partner-/Affiliate-Projekte liegen bei TierTarif hinter /go/-Redirects.
+    // Diese Routen bleiben bewusst aus der Sitemap, damit Google keine Tracking-/Outbound-Routen crawlt.
 
     for (const thread of forumThreadsResult.data ?? []) {
       const slug = String(thread.slug ?? "").trim();
@@ -292,16 +308,18 @@ Deno.serve(async (req) => {
 
     await ensurePublicBucket(adminClient);
 
+    const sitemapFile = new File([xml], SITEMAP_PATH, { type: XML_CONTENT_TYPE });
+
     const { error: uploadError } = await adminClient.storage
       .from(BUCKET_NAME)
-      .upload(SITEMAP_PATH, new Blob([xml], { type: "application/xml; charset=utf-8" }), {
+      .upload(SITEMAP_PATH, sitemapFile, {
         upsert: true,
-        contentType: "application/xml; charset=utf-8",
+        contentType: XML_CONTENT_TYPE,
         cacheControl: "300",
       });
 
     if (uploadError) {
-      throw uploadError;
+      throw new Error(`Sitemap upload failed: ${uploadError.message}`);
     }
 
     const { data: publicUrlData } = adminClient.storage.from(BUCKET_NAME).getPublicUrl(SITEMAP_PATH);
@@ -318,11 +336,13 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    const status = message === "Unauthorized" || message === "Missing Authorization header"
+    const status = message.startsWith("Unauthorized") || message === "Missing Authorization header"
       ? 401
-      : message === "Forbidden"
+      : message.startsWith("Forbidden")
         ? 403
         : 500;
+
+    console.error("generate-sitemap failed", message);
 
     return json(
       {
