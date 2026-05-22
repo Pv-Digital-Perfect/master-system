@@ -376,7 +376,11 @@ export default function AdminSettings() {
       { label: "Wie wir vergleichen", url: "/wie-wir-vergleichen" },
       { label: "Kontakt", url: "/kontakt" },
       { label: "Cookie-Einstellungen", url: "/cookie-einstellungen" }
-    ]
+    ],
+    social_links: {
+      facebook: { url: "", enabled: true },
+      instagram: { url: "", enabled: true }
+    }
   };
 
   const [headerConfig, setHeaderConfig] = useState<any>(defaultHeaderConfig);
@@ -902,6 +906,24 @@ export default function AdminSettings() {
     const newLinks = [...(footerConfig.tools_links || [])];
     newLinks[index] = { ...newLinks[index], [field]: value };
     setFooterConfig({ ...footerConfig, tools_links: newLinks });
+  };
+
+  const updateSocialLink = (platform: "facebook" | "instagram", field: "url" | "enabled", value: string | boolean) => {
+    const socialLinks = footerConfig.social_links || {};
+    const current = typeof socialLinks[platform] === "string"
+      ? { url: socialLinks[platform], enabled: true }
+      : (socialLinks[platform] || { url: "", enabled: true });
+
+    setFooterConfig({
+      ...footerConfig,
+      social_links: {
+        ...socialLinks,
+        [platform]: {
+          ...current,
+          [field]: value,
+        },
+      },
+    });
   };
 
   // --- HEADER SUB-LINKS LOGIC ---
@@ -1519,6 +1541,42 @@ export default function AdminSettings() {
                   </div>
                 ))}
                 <Button variant="outline" size="sm" onClick={addFooterToolLink}><Plus className="w-3 h-3 mr-2" /> Neu</Button>
+              </div>
+
+              <div className="space-y-4 border-t pt-6">
+                <div>
+                  <h4 className="font-medium flex items-center gap-2 text-slate-700 dark:text-slate-300"><LinkIcon className="w-4 h-4" /> Social Media</h4>
+                  <p className="mt-1 text-xs text-muted-foreground">Steuert Facebook & Instagram im mobilen Header-Menü und im Footer. Leere URLs werden öffentlich nicht angezeigt.</p>
+                </div>
+
+                {(["facebook", "instagram"] as const).map((platform) => {
+                  const socialLinks = footerConfig.social_links || {};
+                  const raw = socialLinks[platform];
+                  const value = typeof raw === "string" ? raw : raw?.url || "";
+                  const enabled = typeof raw === "string" ? true : raw?.enabled !== false;
+                  const label = platform === "facebook" ? "Facebook" : "Instagram";
+
+                  return (
+                    <div key={platform} className="grid gap-3 rounded-xl border border-border bg-muted/20 p-4 md:grid-cols-[140px_1fr_130px] md:items-end">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Plattform</Label>
+                        <div className="flex h-10 items-center rounded-md border border-border bg-background px-3 text-sm font-semibold text-foreground">{label}</div>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Profil-URL</Label>
+                        <Input
+                          value={value}
+                          onChange={e => updateSocialLink(platform, "url", e.target.value)}
+                          placeholder={platform === "facebook" ? "https://www.facebook.com/..." : "https://www.instagram.com/.../"}
+                        />
+                      </div>
+                      <div className="flex h-10 items-center justify-between rounded-md border border-border bg-background px-3">
+                        <span className="text-xs text-muted-foreground">Aktiv</span>
+                        <Switch checked={enabled} onCheckedChange={(checked) => updateSocialLink(platform, "enabled", checked)} />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               <Button onClick={saveFooter} className="w-full mt-2 bg-primary"><Save className="w-4 h-4 mr-2" /> Footer Links Speichern</Button>

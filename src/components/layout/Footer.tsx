@@ -4,6 +4,7 @@ import { Heart, ShieldCheck } from "lucide-react";
 import { useFooterConfig } from "@/hooks/useSettings";
 import { normalizeNavigableHref } from "@/lib/routes";
 import { DEFAULT_BRAND_NAME } from "@/lib/constants";
+import { SocialLinks } from "@/components/SocialLinks";
 
 type FooterLinkItem = {
   label?: string;
@@ -88,6 +89,7 @@ export const Footer = () => {
                 <p className="tt-footer-muted mt-5 max-w-xs text-sm font-medium leading-relaxed">
                   {config.text_description || "Sachliche Vergleiche und Ratgeber rund um Tierversicherungen, OP-Schutz und wichtige Leistungsbedingungen."}
                 </p>
+                <SocialLinks variant="footer" />
               </div>
             </div>
 

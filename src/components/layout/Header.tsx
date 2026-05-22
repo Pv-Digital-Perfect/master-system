@@ -5,6 +5,7 @@ import { useState, useEffect, type MouseEvent } from "react";
 import { useHeaderConfig, useSiteBrandName } from "@/hooks/useSettings";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { normalizeNavigableHref } from "@/lib/routes";
+import { SocialLinks } from "@/components/SocialLinks";
 
 const iconMap: Record<string, any> = {
   LayoutGrid, Gamepad2, BrainCircuit, Users, FileText
@@ -340,6 +341,8 @@ export const Header = ({ transparent = false }: HeaderProps) => {
                 {config.button_text}
               </Button>
             </Link>
+
+            <SocialLinks variant="mobileMenu" />
           </nav>
         </div>
       )}

@@ -459,7 +459,11 @@ export const defaultFooterConfig = {
     { label: "Wie wir vergleichen", url: "/wie-wir-vergleichen" },
     { label: "Kontakt", url: "/kontakt" },
     { label: "Cookie-Einstellungen", url: "/cookie-einstellungen" }
-  ]
+  ],
+  social_links: {
+    facebook: { url: "", enabled: true },
+    instagram: { url: "", enabled: true }
+  }
 };
 
 export const defaultScoutyConfig = {
@@ -490,12 +494,44 @@ export function normalizeHeaderConfigValue(config: any = {}) {
   };
 }
 
+function normalizeSocialLinksConfig(socialLinks: any = {}) {
+  const fallback = {
+    facebook: { url: "", enabled: true },
+    instagram: { url: "", enabled: true },
+  };
+
+  if (Array.isArray(socialLinks)) {
+    return socialLinks.reduce((acc, item: any) => {
+      const platform = String(item?.platform || item?.id || "").toLowerCase();
+      if (platform === "facebook" || platform === "instagram") {
+        acc[platform] = {
+          url: String(item?.url || ""),
+          enabled: item?.enabled !== false,
+        };
+      }
+      return acc;
+    }, fallback as Record<"facebook" | "instagram", { url: string; enabled: boolean }>);
+  }
+
+  return {
+    facebook: {
+      url: typeof socialLinks?.facebook === "string" ? socialLinks.facebook : String(socialLinks?.facebook?.url || ""),
+      enabled: typeof socialLinks?.facebook === "string" ? true : socialLinks?.facebook?.enabled !== false,
+    },
+    instagram: {
+      url: typeof socialLinks?.instagram === "string" ? socialLinks.instagram : String(socialLinks?.instagram?.url || ""),
+      enabled: typeof socialLinks?.instagram === "string" ? true : socialLinks?.instagram?.enabled !== false,
+    },
+  };
+}
+
 export function normalizeFooterConfigValue(config: any = {}) {
   return {
     ...config,
     legal_links: normalizeLinkConfigItems(config?.legal_links),
     popular_links: normalizeLinkConfigItems(config?.popular_links),
     tools_links: normalizeLinkConfigItems(config?.tools_links),
+    social_links: normalizeSocialLinksConfig(config?.social_links),
   };
 }
 
