@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /login/
+Disallow: /admin/login
 Disallow: /auth/
 Disallow: /my-account/
 
-Sitemap: https://tiertarif.com/sitemap.xml
+Sitemap: https://pv-system.digital-perfect.com/sitemap.xml

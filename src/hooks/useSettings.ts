@@ -179,7 +179,10 @@ async function fetchPublicSettings(): Promise<Record<string, Json>> {
     .select("key, value")
     .in("key", PUBLIC_SETTINGS_KEYS);
 
-  if (error) throw error;
+  if (error) {
+    console.warn("settings table not available yet, using environment defaults", error.message);
+    return {};
+  }
 
   const settings: Record<string, Json> = {};
   data?.forEach((row) => {
@@ -201,7 +204,10 @@ async function fetchAdminSettings(): Promise<Record<string, Json>> {
     .from("settings")
     .select("key, value");
 
-  if (error) throw error;
+  if (error) {
+    console.warn("settings table not available yet, using environment defaults", error.message);
+    return {};
+  }
 
   const settings: Record<string, Json> = {};
   data?.forEach((row) => {

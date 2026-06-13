@@ -1,5 +1,5 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "pv-lead-system-pro",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -108,5 +108,6 @@
     "@testing-library/user-event": "^14.6.1",
     "jsdom": "^25.0.1",
     "vitest": "^2.1.9"
-  }
+  },
+  "description": "White-label PV lead system for photovoltaic providers"
 }
