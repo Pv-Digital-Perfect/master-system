@@ -1,14 +1,14 @@
-export const DEFAULT_BRAND_NAME = import.meta.env.VITE_BRAND_NAME || "PV Lead System Pro";
+export const DEFAULT_BRAND_NAME = import.meta.env.VITE_BRAND_NAME || "PV-System.Digital-Perfect";
 
 export const DEFAULT_SITE_URL =
-  (import.meta.env.VITE_SITE_URL?.trim() || "https://pv-lead-system.at").replace(/\/+$/, "");
+  (import.meta.env.VITE_SITE_URL?.trim() || "https://pv-system.digital-perfect.com").replace(/\/+$/, "");
 
 export const DEFAULT_CONTACT_EMAIL =
-  import.meta.env.VITE_CONTACT_EMAIL?.trim() || "kontakt@pv-lead-system.at";
+  import.meta.env.VITE_CONTACT_EMAIL?.trim() || "pv@digital-perfect.com";
 
 export const DEFAULT_SITE_DESCRIPTION =
   import.meta.env.VITE_SITE_DESCRIPTION?.trim() ||
-  "PV Lead System Pro ist ein White-Label-System für Photovoltaik-Anbieter: Website, PV-Rechner, Angebotsanfrage, Leadverwaltung und Termin-CTA in einem System.";
+  "Photovoltaik-Kosten, Stromersparnis, Speicher und Fördermöglichkeiten unverbindlich berechnen und eine kostenlose PV-Anfrage stellen.";
 
 export const DEFAULT_AUTHOR_NAME = DEFAULT_BRAND_NAME;
 

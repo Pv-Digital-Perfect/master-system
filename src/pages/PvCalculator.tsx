@@ -70,7 +70,7 @@ export default function PvCalculator() {
       <Header />
 
       <main className="pt-[72px]">
-        <section className="relative isolate overflow-hidden bg-[#0F172A] text-white">
+        <section className="relative isolate hidden overflow-hidden bg-[#0F172A] text-white md:block">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_10%,rgba(249,115,22,0.22),transparent_28%),radial-gradient(circle_at_88%_12%,rgba(34,197,94,0.14),transparent_24%),linear-gradient(135deg,#0F172A_0%,#111827_52%,#10231D_100%)]" />
           <div className="absolute left-8 top-10 -z-10 h-72 w-72 rounded-full bg-[#F97316]/10 blur-3xl" />
           <div className="absolute bottom-0 right-0 -z-10 h-80 w-80 rounded-full bg-[#22C55E]/10 blur-3xl" />
@@ -118,23 +118,30 @@ export default function PvCalculator() {
           </div>
         </section>
 
-        <section className="container mx-auto px-4 py-10 md:py-14">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+        <section className="container mx-auto px-4 py-5 md:py-14">
+          <div className="mb-5 rounded-[1.5rem] border border-[#808080]/20 bg-white p-4 shadow-sm md:hidden">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-[#F97316]/10 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#EA580C]">
+              <Calculator className="h-4 w-4" /> PV-Rechner
+            </div>
+            <h1 className="font-display text-2xl font-extrabold tracking-[-0.035em] text-[#0F172A]">Daten eingeben, Ergebnis sofort sehen.</h1>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">Stromverbrauch, Dachfläche, Speicher und Wallbox auswählen — die Schätzung aktualisiert sich direkt.</p>
+          </div>
+          <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
             <Card className="overflow-hidden border border-[#808080]/20 bg-white shadow-2xl shadow-slate-900/10">
               <CardContent className="p-0">
-                <div className="border-b border-[#808080]/20 bg-gradient-to-r from-white via-orange-50/60 to-emerald-50/80 p-6 md:p-8">
+                <div className="border-b border-[#808080]/20 bg-gradient-to-r from-white via-orange-50/60 to-emerald-50/80 p-5 md:p-8">
                   <div className="flex items-center gap-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F97316] text-white shadow-lg shadow-orange-500/20">
                       <SlidersHorizontal className="h-6 w-6" />
                     </div>
                     <div>
-                      <h2 className="font-display text-2xl font-extrabold tracking-[-0.03em] text-[#0F172A]">Ihre Eckdaten</h2>
+                      <h2 className="font-display text-xl font-extrabold tracking-[-0.03em] text-[#0F172A] md:text-2xl">Ihre Eckdaten</h2>
                       <p className="text-sm text-slate-500">Sofort berechnet, sauber lesbar, ohne Seitenreload.</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-6 p-6 md:p-8">
+                <div className="space-y-5 p-5 md:space-y-6 md:p-8">
                   <CalculatorSlider
                     icon={<Zap className="h-5 w-5" />}
                     label="Jährlicher Stromverbrauch"
@@ -251,7 +258,7 @@ function MiniMetric({ label, value, success = false }: { label: string; value: s
 
 function CalculatorSlider({ icon, label, value, min, max, step, suffix, helper, onChange }: { icon: ReactNode; label: string; value: number; min: number; max: number; step: number; suffix: string; helper: string; onChange: (value: number) => void }) {
   return (
-    <div className="space-y-4 rounded-[1.75rem] border border-[#808080]/20 bg-[#F8FAFC] p-5">
+    <div className="space-y-4 rounded-[1.5rem] border border-[#808080]/20 bg-[#F8FAFC] p-4 md:rounded-[1.75rem] md:p-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-[#F97316] shadow-sm ring-1 ring-[#808080]/10">{icon}</div>
@@ -272,7 +279,7 @@ function CalculatorSlider({ icon, label, value, min, max, step, suffix, helper, 
 
 function OptionSelect({ icon, label, value, onValueChange, options }: { icon: ReactNode; label: string; value: string; onValueChange: (value: string) => void; options: Array<{ value: string; label: string }> }) {
   return (
-    <div className="rounded-[1.75rem] border border-[#808080]/20 bg-[#F8FAFC] p-5">
+    <div className="rounded-[1.5rem] border border-[#808080]/20 bg-[#F8FAFC] p-4 md:rounded-[1.75rem] md:p-5">
       <div className="mb-3 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-[#F97316] shadow-sm ring-1 ring-[#808080]/10">{icon}</div>
         <Label className="font-display text-base font-extrabold text-[#0F172A]">{label}</Label>
