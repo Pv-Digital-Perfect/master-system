@@ -1,6 +1,6 @@
 import { Navigate, Outlet, NavLink, useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { LayoutDashboard, Settings, LogOut, Loader2, Menu, X, Globe, ShieldCheck, MessageSquare, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, Settings, LogOut, Loader2, Menu, X, Globe, ShieldCheck, MessageSquare, BarChart3, ClipboardCheck, MonitorCheck, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,9 @@ type AdminNavItem = {
 const navItems: AdminNavItem[] = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
   { label: "PV-Anfragen", icon: MessageSquare, path: "/admin/leads" },
+  { label: "Analytics", icon: BarChart3, path: "/admin/analytics" },
+  { label: "Live-Seiten", icon: MonitorCheck, path: "/admin/live" },
+  { label: "Checkliste", icon: ClipboardCheck, path: "/admin/checklist" },
   { label: "Einstellungen", icon: Settings, path: "/admin/settings" },
 ];
 

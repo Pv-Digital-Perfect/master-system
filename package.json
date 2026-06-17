@@ -14,7 +14,9 @@
     "start": "npx serve -s dist",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "customer:create": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/create-customer.ps1",
+    "check:launch": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/check-launch.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

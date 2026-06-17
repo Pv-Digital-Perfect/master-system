@@ -1,26 +1,13 @@
-export const DEFAULT_BRAND_NAME = import.meta.env.VITE_BRAND_NAME || "PV-System.Digital-Perfect";
+import { buildSiteUrl, siteConfig } from "@/config/siteConfig";
 
-export const DEFAULT_SITE_URL =
-  (import.meta.env.VITE_SITE_URL?.trim() || "https://pv-system.digital-perfect.com").replace(/\/+$/, "");
+export const DEFAULT_BRAND_NAME = siteConfig.brandName;
+export const DEFAULT_SITE_URL = siteConfig.siteUrl;
+export const DEFAULT_CONTACT_EMAIL = siteConfig.contact.email;
+export const DEFAULT_SITE_DESCRIPTION = siteConfig.siteDescription;
+export const DEFAULT_AUTHOR_NAME = siteConfig.brandName;
+export const DEFAULT_ASSISTANT_IMAGE = siteConfig.assets.assistantImage;
+export const DEFAULT_HERO_IMAGE = siteConfig.assets.defaultHeroImage;
 
-export const DEFAULT_CONTACT_EMAIL =
-  import.meta.env.VITE_CONTACT_EMAIL?.trim() || "pv@digital-perfect.com";
-
-export const DEFAULT_SITE_DESCRIPTION =
-  import.meta.env.VITE_SITE_DESCRIPTION?.trim() ||
-  "Photovoltaik-Kosten, Stromersparnis, Speicher und Fördermöglichkeiten unverbindlich berechnen und eine kostenlose PV-Anfrage stellen.";
-
-export const DEFAULT_AUTHOR_NAME = DEFAULT_BRAND_NAME;
-
-export const DEFAULT_ASSISTANT_IMAGE =
-  import.meta.env.VITE_ASSISTANT_IMAGE || "/brand/default-assistant.png";
-
-export const DEFAULT_HERO_IMAGE =
-  import.meta.env.VITE_DEFAULT_HERO_IMAGE || "/brand/default-hero.webp";
-
-export function buildAbsoluteSiteUrl(path = "/", siteUrl = DEFAULT_SITE_URL) {
-  const base = String(siteUrl || DEFAULT_SITE_URL).replace(/\/+$/, "");
-  const rawPath = String(path || "/").trim();
-  const normalizedPath = rawPath.startsWith("/") ? rawPath : `/${rawPath}`;
-  return `${base}${normalizedPath}`;
+export function buildAbsoluteSiteUrl(path = "/") {
+  return buildSiteUrl(path);
 }

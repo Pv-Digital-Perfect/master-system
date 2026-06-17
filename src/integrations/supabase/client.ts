@@ -1,16 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-// Wir ziehen die Keys dynamisch aus den Environment Variables (.env)
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabaseUrl = SUPABASE_URL || '';
 export const supabaseAnonKey = SUPABASE_ANON_KEY || '';
 
-// Sicherheitsprüfung für die lokale Entwicklung
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.error("FATAL ERROR: Supabase Keys fehlen in den Environment Variables! Prüfe deine .env Datei.");
+  console.error('FATAL ERROR: Supabase ENV fehlt. Setze VITE_SUPABASE_URL und VITE_SUPABASE_PUBLISHABLE_KEY oder VITE_SUPABASE_ANON_KEY.');
 }
 
 export const supabase = createClient<Database>(SUPABASE_URL || '', SUPABASE_ANON_KEY || '', {
@@ -18,5 +16,5 @@ export const supabase = createClient<Database>(SUPABASE_URL || '', SUPABASE_ANON
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
-  }
+  },
 });

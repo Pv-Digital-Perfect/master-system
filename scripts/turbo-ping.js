@@ -1,86 +1,32 @@
-import { google } from 'googleapis';
-import fs from 'fs';
-import path from 'path';
-import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import fetch from 'node-fetch'; // Wir erzwingen das robuste node-fetch
+const SYSTEM_SITE_URL = 'https://pv-system.digital-perfect.com';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
-
-const KEY_FILE = path.resolve(__dirname, '../service-account.json');
-const DOMAIN = process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://pv-system.digital-perfect.com';
-
-const URLS_TO_INDEX = [
-  '/',
-  '/pv-rechner',
-  '/stromkosten-sparen',
-  '/speicher-rechner',
-  '/foerder-check',
-  '/photovoltaik-kosten',
-  '/foerderung',
-  '/referenzen',
-  '/angebot-anfordern',
-  '/kontakt',
-];
-
-async function fastPin() {
-  console.log('🔧 PV-System Diagnose-Ping startet...');
-
-  if (!fs.existsSync(KEY_FILE)) {
-    console.error(`❌ FEHLER: Key fehlt unter: ${KEY_FILE}`);
-    return;
-  }
-
+function normalizeDomain(value) {
+  const normalized = String(value || SYSTEM_SITE_URL).trim().replace(/\/+$/, '');
   try {
-    const auth = new google.auth.GoogleAuth({
-      keyFile: KEY_FILE,
-      scopes: ['https://www.googleapis.com/auth/indexing'],
-    });
-
-    const client = await auth.getClient();
-    const tokenResponse = await client.getAccessToken();
-    const accessToken = tokenResponse.token;
-
-    for (const url of URLS_TO_INDEX) {
-      const fullUrl = url.startsWith('http') ? url : `${DOMAIN}${url}`;
-      
-      const response = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          url: fullUrl,
-          type: 'URL_UPDATED',
-        }),
-      });
-
-      // Wir holen den Rohtext, egal ob JSON oder HTML
-      const responseText = await response.text();
-
-      if (response.ok) {
-        console.log(`✅ Google hat die URL geschluckt: ${fullUrl}`);
-      } else {
-        console.error(`\n❌ GOOGLE BLOCKIERT: ${fullUrl}`);
-        console.error(`Status Code: ${response.status}`);
-        
-        // Wir filtern die echte Fehlermeldung aus Googles HTML
-        const titleMatch = responseText.match(/<title>(.*?)<\/title>/i);
-        if (titleMatch) {
-            console.error(`Google sagt: "${titleMatch[1]}"`);
-        } else {
-            console.error(`Rohdaten: ${responseText.substring(0, 150)}...`);
-        }
-      }
-    }
-    console.log('\n🏁 Diagnose abgeschlossen.');
-  } catch (err) {
-    console.error('❌ SYSTEMFEHLER:', err.message);
+    const hostname = new URL(normalized).hostname;
+    const oldWrongHost = ['pv', 'anlage'].join('-') + '.digital-perfect.com';
+    return hostname === oldWrongHost ? SYSTEM_SITE_URL : normalized;
+  } catch {
+    return normalized;
   }
 }
 
-fastPin();
+const DOMAIN = normalizeDomain(process.env.VITE_SITE_URL || process.env.SITE_URL || SYSTEM_SITE_URL);
+const sitemapUrl = `${DOMAIN}/sitemap.xml`;
+
+const endpoints = [
+  `https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`,
+  `https://www.bing.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`,
+];
+
+console.log(`Sitemap: ${sitemapUrl}`);
+
+for (const endpoint of endpoints) {
+  try {
+    const response = await fetch(endpoint, { method: 'GET' });
+    console.log(`${response.ok ? 'OK' : 'WARN'} ${response.status} ${endpoint}`);
+  } catch (error) {
+    console.log(`FAIL ${endpoint}`);
+    console.log(error instanceof Error ? error.message : String(error));
+  }
+}

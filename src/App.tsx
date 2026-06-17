@@ -34,6 +34,9 @@ const AdminLogin = lazy(() => import("./pages/admin/Login"));
 const AdminLayout = lazy(() => import("./pages/admin/Layout"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminLeads = lazy(() => import("./pages/admin/Leads"));
+const AdminAnalytics = lazy(() => import("./pages/admin/Analytics"));
+const AdminLive = lazy(() => import("./pages/admin/Live"));
+const AdminChecklist = lazy(() => import("./pages/admin/Checklist"));
 const AdminSettings = lazy(() => import("./pages/admin/Settings"));
 const Impressum = lazy(() => import("./pages/Impressum"));
 const AGB = lazy(() => import("./pages/AGB"));
@@ -171,6 +174,9 @@ const App = () => {
                     <Route path="/admin" element={<AdminLayout />}>
                       <Route index element={<AdminDashboard />} />
                       <Route path="leads" element={<AdminLeads />} />
+                      <Route path="analytics" element={<AdminAnalytics />} />
+                      <Route path="live" element={<AdminLive />} />
+                      <Route path="checklist" element={<AdminChecklist />} />
                       <Route path="settings" element={<AdminSettings />} />
                     </Route>
 

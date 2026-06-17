@@ -4,9 +4,12 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Cookie, Database, FileText, Mail, Server, ShieldCheck, UserCheck } from "lucide-react";
 import { DEFAULT_BRAND_NAME, DEFAULT_CONTACT_EMAIL } from "@/lib/constants";
+import { siteConfig } from "@/config/siteConfig";
 import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
 export default function Datenschutz() {
+  const { legal } = siteConfig;
+
   return (
     <div className="min-h-screen bg-white text-slate-950">
       <Helmet>
@@ -28,7 +31,8 @@ export default function Datenschutz() {
           <div className="mx-auto max-w-4xl space-y-6">
             <LegalBlock title="1. Verantwortlicher" icon={<FileText className="h-5 w-5" />}>
               <p><strong>{DEFAULT_BRAND_NAME}</strong></p>
-              <p>Betreiber der Website: Digital-Perfect</p>
+              <p>{legal.operatorLabel}: {legal.operatorName}</p>
+              {legal.representedBy ? <p>Vertreten durch: {legal.representedBy}</p> : null}
               <p>E-Mail: <a href={`mailto:${DEFAULT_CONTACT_EMAIL}`} className="font-bold text-emerald-700 hover:text-emerald-900">{DEFAULT_CONTACT_EMAIL}</a></p>
               <p>Weitere Anbieterinformationen finden Sie im Impressum.</p>
             </LegalBlock>
@@ -51,27 +55,22 @@ export default function Datenschutz() {
 
             <LegalBlock title="5. Cookies und Einwilligungen" icon={<Cookie className="h-5 w-5" />}>
               <p>Diese Website verwendet technisch notwendige Speichermechanismen, damit Grundfunktionen sicher bereitgestellt werden können.</p>
-              <p>Optionale Analyse- oder Marketingdienste werden nur aktiviert, wenn Sie über das Cookie-Banner eine entsprechende Einwilligung erteilen. Sie können eine erteilte Einwilligung jederzeit über die Cookie-Einstellungen widerrufen.</p>
+              <p>Optionale Analyse- oder Marketingdienste werden nur aktiviert, wenn Sie über das Cookie-Banner eine entsprechende Einwilligung erteilen. Ihre Auswahl kann über die Cookie-Einstellungen angepasst werden.</p>
             </LegalBlock>
 
-            <LegalBlock title="6. Speicherdauer" icon={<ShieldCheck className="h-5 w-5" />}>
-              <p>Anfragedaten werden nur so lange gespeichert, wie dies für Bearbeitung, Rückfragen, Dokumentation, Angebotsvorbereitung oder gesetzliche Pflichten erforderlich ist.</p>
-              <p>Technische Protokolldaten werden nur so lange gespeichert, wie dies für Sicherheit, Fehleranalyse und Betrieb erforderlich ist.</p>
+            <LegalBlock title="6. E-Mail-Benachrichtigungen" icon={<Mail className="h-5 w-5" />}>
+              <p>Wenn eine Anfrage abgesendet wird, kann eine Benachrichtigung an die zuständige Betreiberadresse versendet werden. Diese E-Mail enthält die übermittelten Anfrageinformationen, damit eine zeitnahe Bearbeitung möglich ist.</p>
+              <p>Für den Versand können technische E-Mail-Dienstleister eingesetzt werden. Der Versand erfolgt ausschließlich zur Bearbeitung der konkreten Anfrage.</p>
             </LegalBlock>
 
-            <LegalBlock title="7. Empfänger und Weitergabe" icon={<UserCheck className="h-5 w-5" />}>
-              <p>Eine Weitergabe personenbezogener Daten erfolgt nur, wenn sie zur Bearbeitung Ihrer Anfrage notwendig ist, eine gesetzliche Verpflichtung besteht, Sie eingewilligt haben oder ein berechtigtes Interesse vorliegt.</p>
-              <p>Eine Weitergabe zu Werbezwecken ohne entsprechende Rechtsgrundlage findet nicht statt.</p>
+            <LegalBlock title="7. Speicherdauer" icon={<ShieldCheck className="h-5 w-5" />}>
+              <p>Personenbezogene Daten werden nur so lange gespeichert, wie es für die Bearbeitung Ihrer Anfrage, gesetzliche Pflichten, Nachweiszwecke oder berechtigte Interessen erforderlich ist.</p>
+              <p>Wenn keine weiterführende Geschäftsbeziehung entsteht und keine gesetzlichen Aufbewahrungspflichten entgegenstehen, werden Anfrageinformationen regelmäßig gelöscht oder anonymisiert.</p>
             </LegalBlock>
 
-            <LegalBlock title="8. Ihre Rechte" icon={<ShieldCheck className="h-5 w-5" />}>
-              <p>Sie haben nach Maßgabe der gesetzlichen Voraussetzungen Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch.</p>
-              <p>Einwilligungen können Sie jederzeit mit Wirkung für die Zukunft widerrufen. Die Rechtmäßigkeit der Verarbeitung bis zum Widerruf bleibt unberührt.</p>
+            <LegalBlock title="8. Ihre Rechte" icon={<UserCheck className="h-5 w-5" />}>
+              <p>Sie haben nach Maßgabe der geltenden Datenschutzvorschriften insbesondere Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch und Widerruf erteilter Einwilligungen.</p>
               <p>Zur Ausübung Ihrer Rechte kontaktieren Sie uns unter <a href={`mailto:${DEFAULT_CONTACT_EMAIL}`} className="font-bold text-emerald-700 hover:text-emerald-900">{DEFAULT_CONTACT_EMAIL}</a>.</p>
-            </LegalBlock>
-
-            <LegalBlock title="9. Beschwerderecht" icon={<FileText className="h-5 w-5" />}>
-              <p>Wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer personenbezogenen Daten gegen Datenschutzrecht verstößt, können Sie sich an die zuständige Datenschutzaufsichtsbehörde wenden.</p>
             </LegalBlock>
           </div>
         </section>

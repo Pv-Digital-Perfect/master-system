@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { MouseEvent } from "react";
 import { ShieldCheck, Zap, CalendarCheck, Home } from "lucide-react";
 import { DEFAULT_BRAND_NAME, DEFAULT_CONTACT_EMAIL } from "@/lib/constants";
+import { siteConfig } from "@/config/siteConfig";
 import { openCookieSettings } from "@/lib/cookie-consent";
 import { getAvailableFooterLinks, hasPackageFeature } from "@/config/packageConfig";
 
@@ -45,6 +46,11 @@ export const Footer = () => {
             <a href={`mailto:${DEFAULT_CONTACT_EMAIL}`} className="mt-4 block text-sm font-bold text-orange-200 hover:text-white">
               {DEFAULT_CONTACT_EMAIL}
             </a>
+            {siteConfig.contact.phone ? (
+              <a href={`tel:${siteConfig.contact.phone.replace(/\s+/g, "")}`} className="mt-2 block text-sm font-bold text-orange-200 hover:text-white">
+                {siteConfig.contact.phone}
+              </a>
+            ) : null}
           </div>
 
           <div>

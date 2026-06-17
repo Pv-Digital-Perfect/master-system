@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { Copy, Loader2, Mail, Phone, Search, Save } from "lucide-react";
+import { Copy, FileText, Loader2, Mail, MessageCircle, Phone, Search, Save } from "lucide-react";
 
 type PvLead = {
   id: string;
@@ -138,8 +138,33 @@ export default function AdminLeads() {
     toast({ title: `${filteredLeads.length} Lead-E-Mails kopiert` });
   }
 
+
+  function normalizePhone(phone?: string | null) {
+    return (phone || "").replace(/[^+0-9]/g, "");
+  }
+
+  function copyLeadSummary(lead: PvLead) {
+    const summary = [
+      `PV-Anfrage: ${lead.full_name || "Ohne Name"}`,
+      `E-Mail: ${lead.email || "—"}`,
+      `Telefon: ${lead.phone || "—"}`,
+      `Ort: ${(lead.postal_code || "") + " " + (lead.city || "")}`.trim(),
+      `Immobilie: ${humanize(lead.property_type)}`,
+      `Dach: ${humanize(lead.roof_type)} / ${lead.roof_area_sqm ? `${lead.roof_area_sqm} m²` : "Fläche offen"}`,
+      `Verbrauch: ${lead.annual_consumption_kwh ? `${lead.annual_consumption_kwh} kWh` : "—"}`,
+      `Speicher: ${humanize(lead.storage_interest)}`,
+      `Wallbox: ${humanize(lead.wallbox_interest)}`,
+      `Zeitrahmen: ${humanize(lead.timeline)}`,
+      `Budget: ${humanize(lead.budget_range)}`,
+      `Nachricht: ${lead.message || "—"}`,
+    ].join("\n");
+
+    navigator.clipboard.writeText(summary);
+    toast({ title: "Lead-Zusammenfassung kopiert" });
+  }
+
   function exportCsv() {
-    const headers = ["Datum", "Name", "E-Mail", "Telefon", "PLZ", "Ort", "Eigentümer", "Immobilie", "Dach", "Dachfläche", "Ausrichtung", "Dachalter", "Zählerschrank", "Verbrauch", "Speicher", "Wallbox", "Zeitrahmen", "Budget", "Quelle", "Status", "Mail Betreiber", "Mail Kunde", "Nachricht", "Interne Notizen"];
+    const headers = ["Datum", "Name", "E-Mail", "Telefon", "PLZ", "Ort", "Eigentümer", "Immobilie", "Dach", "Dachfläche", "Ausrichtung", "Dachalter", "Zählerschrank", "Verbrauch", "Speicher", "Wallbox", "Zeitrahmen", "Budget", "Quelle", "Status", "Mail Betreiber", "Mail Interessent", "Nachricht", "Interne Notizen"];
     const rows = filteredLeads.map((lead) => [
       new Date(lead.created_at).toLocaleString("de-AT"),
       lead.full_name || "",
@@ -241,6 +266,12 @@ export default function AdminLeads() {
                         <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><Mail className="h-3.5 w-3.5" />{lead.email || "—"}</div>
                         <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><Phone className="h-3.5 w-3.5" />{lead.phone || "—"}</div>
                         <div className="mt-3 flex flex-wrap gap-1">
+                          {lead.email ? <Button asChild size="sm" variant="outline" className="h-8 rounded-full px-3 text-xs"><a href={`mailto:${lead.email}`}><Mail className="mr-1 h-3.5 w-3.5" />Mail</a></Button> : null}
+                          {lead.phone ? <Button asChild size="sm" variant="outline" className="h-8 rounded-full px-3 text-xs"><a href={`tel:${normalizePhone(lead.phone)}`}><Phone className="mr-1 h-3.5 w-3.5" />Anrufen</a></Button> : null}
+                          {lead.phone ? <Button asChild size="sm" variant="outline" className="h-8 rounded-full px-3 text-xs"><a href={`https://wa.me/${normalizePhone(lead.phone).replace(/^\+/, "")}`} target="_blank" rel="noreferrer"><MessageCircle className="mr-1 h-3.5 w-3.5" />WhatsApp</a></Button> : null}
+                          <Button size="sm" variant="outline" className="h-8 rounded-full px-3 text-xs" onClick={() => copyLeadSummary(lead)}><FileText className="mr-1 h-3.5 w-3.5" />Kopieren</Button>
+                        </div>
+                        <div className="mt-3 flex flex-wrap gap-1">
                           {lead.email_notification_sent_at ? (
                             <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">Betreiber-Mail gesendet</Badge>
                           ) : lead.email_notification_error ? (
@@ -249,7 +280,7 @@ export default function AdminLeads() {
                             <Badge variant="outline">Betreiber-Mail offen</Badge>
                           )}
                           {lead.customer_confirmation_sent_at ? (
-                            <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">Kunden-Mail gesendet</Badge>
+                            <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">Interessenten-Mail gesendet</Badge>
                           ) : null}
                         </div>
                       </TableCell>

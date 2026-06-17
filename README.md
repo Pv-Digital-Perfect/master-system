@@ -1,74 +1,122 @@
-# Welcome to your Lovable project
+# PV-System.Digital-Perfect
 
-## Project info
+Professionelle Photovoltaik-Website mit PV-Rechner, Anfrageformular, Lead-Verwaltung, Mail-Benachrichtigung, Admin-Cockpit und paketabhängigen Funktionen.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Live-Domain:
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```text
+https://pv-system.digital-perfect.com/
 ```
 
-**Edit a file directly in GitHub**
+## Kernbereiche
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- Öffentliche PV-Website
+- PV-Kostenrechner
+- Speicher-Rechner
+- Stromkosten-Rechner
+- Förder-Check
+- Angebotsformular
+- Kontaktformular
+- Adminbereich für PV-Anfragen
+- Analytics, Live-Seiten und Website-Check
+- Bearbeitbare Website-Texte und Rechnerwerte im Admin
 
-**Use GitHub Codespaces**
+## Pakete
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```env
+VITE_PACKAGE_TIER=starter
+VITE_PACKAGE_TIER=business
+VITE_PACKAGE_TIER=premium
+```
 
-## What technologies are used for this project?
+Für das Master-/Demo-System:
 
-This project is built with:
+```env
+VITE_PACKAGE_TIER=premium
+VITE_SITE_URL=https://pv-system.digital-perfect.com/
+VITE_CONTACT_EMAIL=pv@digital-perfect.com
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Supabase ENV
 
-## How can I deploy this project?
+Der Client akzeptiert beide Varianten:
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```env
+VITE_SUPABASE_URL=https://lcbmavlggundawcomznp.supabase.co
+VITE_SUPABASE_ANON_KEY=...
+```
 
-## Can I connect a custom domain to my Lovable project?
+oder:
 
-Yes, you can!
+```env
+VITE_SUPABASE_URL=https://lcbmavlggundawcomznp.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=...
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Adminbereich
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```text
+/admin
+/admin/leads
+/admin/analytics
+/admin/live
+/admin/checklist
+/admin/settings
+```
 
+In den Einstellungen können gepflegt werden:
+
+- Startseiten-Kennzeichnung
+- Hero-Hauptüberschrift
+- Hero-Beschreibung
+- CTA-Beschriftungen
+- Einsatzgebiet
+- Spezialisierung
+- Rückmeldezeit
+- Beratungshinweise
+- Förderhinweise
+- Finanzierungs-/Servicehinweise
+- Terminlink
+- Rechnerwerte für PV, Speicher, Wallbox und Stromkosten
+
+## Datenbank
+
+Für neue Setups ist die Baseline enthalten:
+
+```text
+supabase/migrations/20260617_pv_launch_baseline.sql
+```
+
+Für bestehende Setups mit der erweiterten Einstellungsseite zusätzlich ausführen:
+
+```text
+supabase/migrations/20260618_pv_editable_admin_settings.sql
+```
+
+## Build
+
+```powershell
+npm run build
+```
+
+Paketweise prüfen:
+
+```powershell
+$env:VITE_PACKAGE_TIER="starter"; npm run build
+$env:VITE_PACKAGE_TIER="business"; npm run build
+$env:VITE_PACKAGE_TIER="premium"; npm run build
+Remove-Item Env:VITE_PACKAGE_TIER
+```
+
+## Live-Prüfung
+
+Nach Änderungen prüfen:
+
+```text
+https://pv-system.digital-perfect.com/
+https://pv-system.digital-perfect.com/pv-rechner
+https://pv-system.digital-perfect.com/angebot-anfordern
+https://pv-system.digital-perfect.com/admin
+```
+
+Danach eine Testanfrage absenden und im Admin unter `/admin/leads` prüfen.

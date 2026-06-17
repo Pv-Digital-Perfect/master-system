@@ -1,10 +1,11 @@
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import { DEFAULT_BRAND_NAME, DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_URL } from "@/lib/constants";
+import { siteConfig } from "@/config/siteConfig";
 import { buildAbsoluteSiteUrl } from "@/lib/routes";
 import { routeFeatureMap, hasPackageFeature } from "@/config/packageConfig";
 
-const DEFAULT_OG_IMAGE = "https://lcbmavlggundawcomznp.supabase.co/storage/v1/object/public/Startseitenbilder/pv-system-digital-perfect-solar-hightech-desktop.png";
+const DEFAULT_OG_IMAGE = siteConfig.seo.ogImage;
 
 type SeoEntry = {
   title: string;
@@ -73,7 +74,7 @@ export function SeoDefaults() {
   return (
     <Helmet prioritizeSeoTags>
       <meta property="og:site_name" content={DEFAULT_BRAND_NAME} />
-      <meta property="og:locale" content="de_AT" />
+      <meta property="og:locale" content={siteConfig.seo.locale} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={page.title} />
@@ -84,7 +85,7 @@ export function SeoDefaults() {
       <meta name="twitter:description" content={page.description} />
       <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
       <meta name="application-name" content={DEFAULT_BRAND_NAME} />
-      <meta name="theme-color" content="#0F172A" />
+      <meta name="theme-color" content={siteConfig.seo.themeColor} />
       <link rel="canonical" href={canonicalUrl} />
       {shouldNoIndex && <meta name="robots" content="noindex,follow" />}
       <link rel="sitemap" type="application/xml" href={`${DEFAULT_SITE_URL}/sitemap.xml`} />

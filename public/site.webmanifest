@@ -1,7 +1,7 @@
 {
   "name": "PV-System.Digital-Perfect",
   "short_name": "PV-System",
-  "description": "Photovoltaik planen, Kosten berechnen und unverbindliche PV-Anfrage senden.",
+  "description": "PV-Anfragen, Photovoltaik-Rechner und Beratungstermine professionell verwalten",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

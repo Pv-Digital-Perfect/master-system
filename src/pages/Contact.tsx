@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { DEFAULT_CONTACT_EMAIL } from "@/lib/constants";
+import { siteConfig } from "@/config/siteConfig";
 import { buildAbsoluteSiteUrl } from "@/lib/routes";
 import { notifyLeadByEmail } from "@/lib/leadNotifications";
 
@@ -97,7 +98,7 @@ export default function Contact() {
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="space-y-5">
               <Card><CardContent className="p-7"><Mail className="mb-4 h-7 w-7 text-orange-500" /><h2 className="text-xl font-black">E-Mail</h2><a href={`mailto:${DEFAULT_CONTACT_EMAIL}`} className="mt-2 block font-bold text-emerald-700">{DEFAULT_CONTACT_EMAIL}</a></CardContent></Card>
-              <Card><CardContent className="p-7"><Phone className="mb-4 h-7 w-7 text-orange-500" /><h2 className="text-xl font-black">Schnelle Rückmeldung</h2><p className="mt-2 text-sm leading-relaxed text-slate-600">Für eine genaue Ersteinschätzung nutzen Sie am besten direkt das strukturierte Anfrageformular.</p><Button asChild className="mt-5 rounded-full bg-orange-500 font-black text-white hover:bg-orange-600"><Link to="/angebot-anfordern">Anfrage starten</Link></Button></CardContent></Card>
+              <Card><CardContent className="p-7"><Phone className="mb-4 h-7 w-7 text-orange-500" /><h2 className="text-xl font-black">Schnelle Rückmeldung</h2>{siteConfig.contact.phone ? <a href={`tel:${siteConfig.contact.phone.replace(/\s+/g, "")}`} className="mt-2 block font-bold text-emerald-700">{siteConfig.contact.phone}</a> : null}<p className="mt-2 text-sm leading-relaxed text-slate-600">Für eine genaue Ersteinschätzung nutzen Sie am besten direkt das strukturierte Anfrageformular.</p><Button asChild className="mt-5 rounded-full bg-orange-500 font-black text-white hover:bg-orange-600"><Link to="/angebot-anfordern">Anfrage starten</Link></Button></CardContent></Card>
             </div>
 
             <Card className="border-0 bg-white shadow-2xl shadow-slate-900/10">

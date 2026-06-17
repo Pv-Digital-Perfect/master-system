@@ -27,9 +27,26 @@ function loadDotEnv(filePath) {
 loadDotEnv(path.resolve(__dirname, '../.env'));
 loadDotEnv(path.resolve(__dirname, '../.env.local'));
 
-const DOMAIN = (process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://pv-system.digital-perfect.com').replace(/\/+$/, '');
+const SYSTEM_SITE_URL = 'https://pv-system.digital-perfect.com';
+function normalizeDomain(value) {
+  const normalized = String(value || SYSTEM_SITE_URL).trim().replace(/\/+$/, '');
+  try {
+    const hostname = new URL(normalized).hostname;
+    const oldWrongHost = ['pv', 'anlage'].join('-') + '.digital-perfect.com';
+    return hostname === oldWrongHost ? SYSTEM_SITE_URL : normalized;
+  } catch {
+    return normalized;
+  }
+}
+
+const DOMAIN = normalizeDomain(process.env.VITE_SITE_URL || process.env.SITE_URL || SYSTEM_SITE_URL);
 const PACKAGE_TIER = String(process.env.VITE_PACKAGE_TIER || 'premium').trim().toLowerCase();
 const today = new Date().toISOString().split('T')[0];
+
+const siteName = process.env.VITE_BRAND_NAME || 'PV-System.Digital-Perfect';
+const siteShortName = process.env.VITE_SITE_SHORT_NAME || 'PV-System';
+const siteDescription = process.env.VITE_SITE_DESCRIPTION || 'Photovoltaik planen, Kosten berechnen und unverbindliche PV-Anfrage senden.';
+const themeColor = process.env.VITE_THEME_COLOR || '#0F172A';
 
 const packageFeatures = {
   starter: new Set(['pvCalculator', 'offerRequest', 'contact', 'photovoltaicCosts']),
@@ -80,10 +97,28 @@ Sitemap: ${DOMAIN}/sitemap.xml
 const publicDir = path.resolve(__dirname, '../public');
 const sitemapPath = path.resolve(publicDir, 'sitemap.xml');
 const robotsPath = path.resolve(publicDir, 'robots.txt');
+const manifestPath = path.resolve(publicDir, 'site.webmanifest');
+
+const manifestJson = {
+  name: siteName,
+  short_name: siteShortName,
+  description: siteDescription,
+  start_url: '/',
+  scope: '/',
+  display: 'standalone',
+  background_color: '#F8FAFC',
+  theme_color: themeColor,
+  icons: [
+    { src: '/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
+    { src: '/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' },
+  ],
+};
 
 fs.writeFileSync(sitemapPath, sitemapXml);
 fs.writeFileSync(robotsPath, robotsTxt);
+fs.writeFileSync(manifestPath, `${JSON.stringify(manifestJson, null, 2)}\n`);
 
 console.log(`✅ Sitemap erstellt: ${visiblePages.length} URLs → ${sitemapPath}`);
 console.log(`✅ Robots.txt aktualisiert → ${robotsPath}`);
+console.log(`✅ Webmanifest aktualisiert → ${manifestPath}`);
 console.log(`ℹ️ Paket: ${PACKAGE_TIER}`);

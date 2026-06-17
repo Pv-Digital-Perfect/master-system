@@ -2,11 +2,14 @@ import type { ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Mail, MapPin, ShieldCheck, FileText, Info, Phone } from "lucide-react";
+import { Mail, MapPin, ShieldCheck, FileText, Info, Phone, Building2 } from "lucide-react";
 import { DEFAULT_BRAND_NAME, DEFAULT_CONTACT_EMAIL, DEFAULT_SITE_URL } from "@/lib/constants";
+import { siteConfig } from "@/config/siteConfig";
 import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
 export default function Impressum() {
+  const { legal, contact } = siteConfig;
+
   return (
     <div className="min-h-screen bg-white text-slate-950">
       <Helmet>
@@ -31,9 +34,16 @@ export default function Impressum() {
             <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
               <LegalCard title="Angaben zum Anbieter" icon={<FileText className="h-5 w-5" />}>
                 <p><strong>{DEFAULT_BRAND_NAME}</strong></p>
-                <p>Betreiber der Website: Digital-Perfect</p>
-                <p>Österreich</p>
+                <p>{legal.operatorLabel}: {legal.operatorName}</p>
+                {legal.representedBy ? <p>Vertreten durch: {legal.representedBy}</p> : null}
+                {contact.addressLines.length ? contact.addressLines.map((line) => <p key={line}>{line}</p>) : <p>{legal.country}</p>}
+                {legal.vatId ? <p>UID / Umsatzsteuer-ID: {legal.vatId}</p> : null}
+                {legal.companyRegister ? <p>Firmenbuch / Register: {legal.companyRegister}</p> : null}
+                {legal.authority ? <p>Zuständige Behörde: {legal.authority}</p> : null}
+                {legal.professionalBody ? <p>Kammer / Berufsverband: {legal.professionalBody}</p> : null}
+                {legal.professionalRules ? <p>Anwendbare Vorschriften: {legal.professionalRules}</p> : null}
                 <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-emerald-600" /><a href={`mailto:${DEFAULT_CONTACT_EMAIL}`} className="font-bold text-emerald-700 hover:text-emerald-900">{DEFAULT_CONTACT_EMAIL}</a></p>
+                {contact.phone ? <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-emerald-600" />{contact.phone}</p> : null}
                 <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-emerald-600" />{DEFAULT_SITE_URL}</p>
               </LegalCard>
 
@@ -57,7 +67,7 @@ export default function Impressum() {
               <p>Diese Website kann Links zu externen Websites enthalten. Auf deren Inhalte haben wir keinen Einfluss. Für externe Inhalte ist der jeweilige Anbieter oder Betreiber verantwortlich.</p>
             </LegalCard>
 
-            <LegalCard title="Urheberrecht" icon={<FileText className="h-5 w-5" />}>
+            <LegalCard title="Urheberrecht" icon={<Building2 className="h-5 w-5" />}>
               <p>Texte, Gestaltung, Bilder, Grafiken und sonstige Inhalte dieser Website sind urheberrechtlich geschützt, soweit sie nicht ausdrücklich anders gekennzeichnet sind.</p>
               <p>Eine Verwendung, Vervielfältigung oder Weitergabe außerhalb gesetzlicher Erlaubnisse bedarf der vorherigen Zustimmung des jeweiligen Rechteinhabers.</p>
             </LegalCard>
