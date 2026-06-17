@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Calculator, Database, Globe, Link as LinkIcon, Loader2, Save, ShieldCheck, SunMedium, Wrench } from "lucide-react";
+import { Calculator, Database, Globe, Image, Link as LinkIcon, Loader2, Save, Search, ShieldCheck, SunMedium, Wrench } from "lucide-react";
 import { toast } from "sonner";
 import { DEFAULT_BRAND_NAME, DEFAULT_CONTACT_EMAIL, DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_URL } from "@/lib/constants";
 import { siteConfig } from "@/config/siteConfig";
@@ -54,25 +54,23 @@ const textFields: Array<{ key: PvTextSettingKey; label: string; helper: string; 
   { key: "warranty_note", label: "Service-/Garantiehinweis", helper: "Hinweis zu Service, Garantie oder Wartung", multiline: true },
   { key: "appointment_link", label: "Terminlink", helper: "optional: externer Link für Beratungstermine" },
   { key: "lead_receiver_label", label: "Empfänger-Bezeichnung", helper: "z. B. PV-Beratung, Vertrieb, Technik-Team" },
-  { key: "trust_primary_text", label: "Trust-Hinweis 1", helper: "kurzer Vertrauenspunkt direkt im Hero" },
-  { key: "trust_secondary_text", label: "Trust-Hinweis 2", helper: "zweiter Vertrauenspunkt direkt im Hero" },
-  { key: "hero_stat_1_label", label: "Hero-Kachel 1 Titel", helper: "kleine Kachel rechts unter dem Hero-Bild" },
-  { key: "hero_stat_1_text", label: "Hero-Kachel 1 Text", helper: "Beschreibung der ersten Hero-Kachel" },
-  { key: "hero_stat_2_label", label: "Hero-Kachel 2 Titel", helper: "kleine Kachel rechts unter dem Hero-Bild" },
-  { key: "hero_stat_2_text", label: "Hero-Kachel 2 Text", helper: "Beschreibung der zweiten Hero-Kachel" },
-  { key: "hero_stat_3_label", label: "Hero-Kachel 3 Titel", helper: "kleine Kachel rechts unter dem Hero-Bild" },
-  { key: "hero_stat_3_text", label: "Hero-Kachel 3 Text", helper: "Beschreibung der dritten Hero-Kachel" },
-  { key: "decision_section_badge", label: "Abschnitt Planung: Badge", helper: "kleiner grüner Text über dem Planungsabschnitt" },
-  { key: "decision_section_headline", label: "Abschnitt Planung: Überschrift", helper: "Hauptüberschrift im Planungsabschnitt", multiline: true },
-  { key: "decision_section_text", label: "Abschnitt Planung: Beschreibung", helper: "Beschreibung im Planungsabschnitt", multiline: true },
-  { key: "process_section_badge", label: "Abschnitt Ablauf: Badge", helper: "kleiner Text über dem Ablaufabschnitt" },
-  { key: "process_section_headline", label: "Abschnitt Ablauf: Überschrift", helper: "Hauptüberschrift im Ablaufabschnitt", multiline: true },
-  { key: "process_section_text", label: "Abschnitt Ablauf: Beschreibung", helper: "Beschreibung im Ablaufabschnitt", multiline: true },
-  { key: "final_cta_badge", label: "Abschluss-CTA: Kennzeichnung", helper: "kleiner Hinweis im dunklen Abschlussbereich" },
-  { key: "final_cta_headline", label: "Abschluss-CTA: Überschrift", helper: "Hauptüberschrift im Abschlussbereich", multiline: true },
-  { key: "final_cta_text", label: "Abschluss-CTA: Beschreibung", helper: "Beschreibung im Abschlussbereich", multiline: true },
-  { key: "final_primary_cta_label", label: "Abschluss-CTA: Button 1", helper: "Button zum PV-Rechner" },
-  { key: "final_secondary_cta_label", label: "Abschluss-CTA: Button 2", helper: "Button zum Anfrageformular" },
+];
+
+const seoFields: Array<{ key: PvTextSettingKey; label: string; helper: string; multiline?: boolean; placeholder?: string }> = [
+  { key: "seo_title", label: "SEO-Titel Startseite", helper: "Titel für Google, Browser-Tab und Social Preview. Ideal ca. 50–60 Zeichen.", placeholder: "PV-System.Digital-Perfect | Photovoltaik planen & Angebot anfragen" },
+  { key: "seo_description", label: "Meta Description Startseite", helper: "Beschreibung für Suchmaschinen. Ideal ca. 140–160 Zeichen.", multiline: true, placeholder: "Photovoltaik-Kosten, Speicher und Förderung unverbindlich berechnen ..." },
+  { key: "seo_keywords", label: "SEO-Keywords intern", helper: "Interne Orientierung für Fokusbegriffe. Nicht überladen.", placeholder: "Photovoltaik, PV-Anlage, Stromspeicher" },
+  { key: "seo_og_title", label: "Social-Titel", helper: "Titel für Facebook, LinkedIn, WhatsApp und andere Vorschauen." },
+  { key: "seo_og_description", label: "Social-Beschreibung", helper: "Kurztext für geteilte Links und Vorschaukarten.", multiline: true },
+  { key: "seo_og_image", label: "Social-/OG-Bild URL", helper: "Bildlink für geteilte Links. Empfehlung: 1200 × 630 px.", placeholder: "https://.../og-image.webp" },
+];
+
+const imageFields: Array<{ key: PvTextSettingKey; label: string; helper: string; previewAlt: string }> = [
+  { key: "hero_image_desktop_url", label: "Hero-Bild Desktop URL", helper: "Großes Startseitenbild für Desktop. Empfehlung: 1600 × 1200 px oder breiter.", previewAlt: "Hero Desktop" },
+  { key: "hero_image_mobile_url", label: "Hero-Bild Mobile URL", helper: "Mobiles Startseitenbild. Empfehlung: vertikal oder 1080 × 1350 px.", previewAlt: "Hero Mobile" },
+  { key: "home_card_1_image_url", label: "Bildkarte 1 URL", helper: "Bild für Karte: PV-Anlage auf dem Dach.", previewAlt: "PV-Anlage auf dem Dach" },
+  { key: "home_card_2_image_url", label: "Bildkarte 2 URL", helper: "Bild für Karte: Strom clever nutzen.", previewAlt: "Strom clever nutzen" },
+  { key: "home_card_3_image_url", label: "Bildkarte 3 URL", helper: "Bild für Karte: Energie für die Zukunft.", previewAlt: "Energie für die Zukunft" },
 ];
 
 const previewInput = {
@@ -117,7 +115,7 @@ export default function AdminSettings() {
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <h2 className="font-display text-3xl font-black tracking-tight text-foreground">Einstellungen</h2>
-          <p className="text-muted-foreground">Website-Texte, Angebotsprozess, Rechnerwerte und sichtbare Startseiten-Inhalte für die PV-Beratung.</p>
+          <p className="text-muted-foreground">Website-Texte, Angebotsprozess, Rechnerwerte und technische Basis für den PV-Betrieb.</p>
         </div>
         <Button onClick={handleSave} disabled={updateSettings.isPending} className="rounded-full bg-orange-500 font-black text-white hover:bg-orange-600">
           {updateSettings.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
@@ -160,7 +158,7 @@ export default function AdminSettings() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><SunMedium className="h-5 w-5 text-orange-500" /> Website-Texte & Angebotsprozess</CardTitle>
-          <CardDescription>Diese Felder steuern die wichtigsten sichtbaren Website-Inhalte direkt aus dem Admin.</CardDescription>
+          <CardDescription>Diese Felder steuern die wichtigsten Website- und Angebotsinhalte direkt aus dem Admin.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-5 lg:grid-cols-2">
           {textFields.map((field) => (
@@ -185,6 +183,68 @@ export default function AdminSettings() {
               <p className="text-xs leading-relaxed text-muted-foreground">{field.helper}</p>
             </div>
           ))}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><Search className="h-5 w-5 text-emerald-600" /> SEO & Meta-Daten</CardTitle>
+          <CardDescription>Diese Felder steuern die Startseiten-Metadaten für Google, Browser-Tab und Social-Media-Vorschauen.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-5 lg:grid-cols-2">
+          {seoFields.map((field) => (
+            <div key={field.key} className={field.multiline ? "space-y-2 lg:col-span-2" : "space-y-2"}>
+              <Label htmlFor={field.key}>{field.label}</Label>
+              {field.multiline ? (
+                <Textarea
+                  id={field.key}
+                  value={String(form[field.key] ?? "")}
+                  onChange={(event) => updateText(field.key, event.target.value)}
+                  placeholder={field.placeholder}
+                  className="min-h-24"
+                />
+              ) : (
+                <Input
+                  id={field.key}
+                  value={String(form[field.key] ?? "")}
+                  onChange={(event) => updateText(field.key, event.target.value)}
+                  placeholder={field.placeholder}
+                />
+              )}
+              <p className="text-xs leading-relaxed text-muted-foreground">{field.helper}</p>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2"><Image className="h-5 w-5 text-orange-500" /> Bilder & Medienlinks</CardTitle>
+          <CardDescription>Alle Startseitenbilder können hier per URL ersetzt werden. Die Bilder werden direkt auf der Website verwendet.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-5 lg:grid-cols-2">
+          {imageFields.map((field) => {
+            const imageUrl = String(form[field.key] ?? "").trim();
+            return (
+              <div key={field.key} className="space-y-3 rounded-2xl border border-border bg-background p-4">
+                <div className="space-y-2">
+                  <Label htmlFor={field.key}>{field.label}</Label>
+                  <Input
+                    id={field.key}
+                    value={imageUrl}
+                    onChange={(event) => updateText(field.key, event.target.value)}
+                    placeholder="https://.../bild.webp"
+                  />
+                  <p className="text-xs leading-relaxed text-muted-foreground">{field.helper}</p>
+                </div>
+                {imageUrl ? (
+                  <div className="overflow-hidden rounded-xl border border-border bg-slate-100">
+                    <img src={imageUrl} alt={field.previewAlt} className="h-36 w-full object-cover" loading="lazy" />
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
         </CardContent>
       </Card>
 
@@ -235,12 +295,14 @@ export default function AdminSettings() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><LinkIcon className="h-5 w-5 text-slate-700" /> Bearbeitbare Bereiche</CardTitle>
-          <CardDescription>Aktuell direkt pflegbar: Startseiten-Texte, CTA-Beschriftungen, Angebotsprozess, Beratungshinweise und Rechnerwerte.</CardDescription>
+          <CardDescription>Aktuell direkt pflegbar: Startseiten-Texte, Bilder, SEO-Metadaten, CTA-Beschriftungen, Angebotsprozess, Beratungshinweise und Rechnerwerte.</CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-3 md:grid-cols-4">
+        <CardContent className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
           <Badge variant="outline" className="justify-center rounded-full py-2">Startseite</Badge>
           <Badge variant="outline" className="justify-center rounded-full py-2">Anfrageprozess</Badge>
           <Badge variant="outline" className="justify-center rounded-full py-2">PV-Rechner</Badge>
+          <Badge variant="outline" className="justify-center rounded-full py-2">Bilder</Badge>
+          <Badge variant="outline" className="justify-center rounded-full py-2">SEO</Badge>
           <Badge variant="outline" className="justify-center rounded-full py-2">Beratungshinweise</Badge>
         </CardContent>
       </Card>

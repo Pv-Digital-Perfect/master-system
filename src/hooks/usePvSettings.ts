@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { siteConfig } from "@/config/siteConfig";
 
 export type PvCalculatorSettings = {
   id: string;
@@ -31,25 +32,17 @@ export type PvCalculatorSettings = {
   warranty_note: string;
   appointment_link: string;
   lead_receiver_label: string;
-  trust_primary_text: string;
-  trust_secondary_text: string;
-  hero_stat_1_label: string;
-  hero_stat_1_text: string;
-  hero_stat_2_label: string;
-  hero_stat_2_text: string;
-  hero_stat_3_label: string;
-  hero_stat_3_text: string;
-  decision_section_badge: string;
-  decision_section_headline: string;
-  decision_section_text: string;
-  process_section_badge: string;
-  process_section_headline: string;
-  process_section_text: string;
-  final_cta_badge: string;
-  final_cta_headline: string;
-  final_cta_text: string;
-  final_primary_cta_label: string;
-  final_secondary_cta_label: string;
+  seo_title: string;
+  seo_description: string;
+  seo_keywords: string;
+  seo_og_title: string;
+  seo_og_description: string;
+  seo_og_image: string;
+  hero_image_desktop_url: string;
+  hero_image_mobile_url: string;
+  home_card_1_image_url: string;
+  home_card_2_image_url: string;
+  home_card_3_image_url: string;
   updated_at?: string | null;
 };
 
@@ -84,25 +77,17 @@ export type PvTextSettingKey =
   | "warranty_note"
   | "appointment_link"
   | "lead_receiver_label"
-  | "trust_primary_text"
-  | "trust_secondary_text"
-  | "hero_stat_1_label"
-  | "hero_stat_1_text"
-  | "hero_stat_2_label"
-  | "hero_stat_2_text"
-  | "hero_stat_3_label"
-  | "hero_stat_3_text"
-  | "decision_section_badge"
-  | "decision_section_headline"
-  | "decision_section_text"
-  | "process_section_badge"
-  | "process_section_headline"
-  | "process_section_text"
-  | "final_cta_badge"
-  | "final_cta_headline"
-  | "final_cta_text"
-  | "final_primary_cta_label"
-  | "final_secondary_cta_label";
+  | "seo_title"
+  | "seo_description"
+  | "seo_keywords"
+  | "seo_og_title"
+  | "seo_og_description"
+  | "seo_og_image"
+  | "hero_image_desktop_url"
+  | "hero_image_mobile_url"
+  | "home_card_1_image_url"
+  | "home_card_2_image_url"
+  | "home_card_3_image_url";
 
 export const DEFAULT_PV_SETTINGS: PvCalculatorSettings = {
   id: "default",
@@ -135,25 +120,17 @@ export const DEFAULT_PV_SETTINGS: PvCalculatorSettings = {
   warranty_note: "Garantie- und Serviceleistungen hängen von Komponenten, Montagepartner und Projektumfang ab.",
   appointment_link: "",
   lead_receiver_label: "PV-Beratung",
-  trust_primary_text: "Unverbindliche Ersteinschätzung",
-  trust_secondary_text: "Persönliche Rückmeldung nach Prüfung Ihrer Angaben",
-  hero_stat_1_label: "PV-Anlage",
-  hero_stat_1_text: "Kosten und Größe grob einschätzen",
-  hero_stat_2_label: "Speicher",
-  hero_stat_2_text: "Eigenverbrauch besser planen",
-  hero_stat_3_label: "Beratung",
-  hero_stat_3_text: "Unverbindliche Anfrage senden",
-  decision_section_badge: "Planung mit Struktur",
-  decision_section_headline: "Damit Ihre PV-Anfrage von Anfang an richtig eingeschätzt werden kann.",
-  decision_section_text: "Eine Photovoltaikanlage ist immer individuell. Deshalb werden Verbrauch, Dach, Speicherwunsch und Zeitplan direkt strukturiert erfasst.",
-  process_section_badge: "Ablauf",
-  process_section_headline: "Von der ersten Einschätzung zur persönlichen Beratung.",
-  process_section_text: "Sie erhalten eine schnelle Orientierung und können danach direkt eine kostenlose Anfrage für Ihr PV-Projekt absenden.",
-  final_cta_badge: "Saubere Ersteinschätzung",
-  final_cta_headline: "Bereit für Ihre PV-Anfrage?",
-  final_cta_text: "Starten Sie mit dem PV-Rechner oder senden Sie Ihre Eckdaten direkt für eine unverbindliche Rückmeldung ab.",
-  final_primary_cta_label: "PV berechnen",
-  final_secondary_cta_label: "Anfrage senden",
+  seo_title: "PV-System.Digital-Perfect | Photovoltaik planen & PV-Angebot anfragen",
+  seo_description: "Photovoltaik-Kosten, Stromersparnis, Speicher und Fördermöglichkeiten unverbindlich berechnen und eine kostenlose PV-Anfrage stellen.",
+  seo_keywords: "Photovoltaik, PV-Anlage, PV-Rechner, Stromspeicher, Wallbox, Solaranlage, PV-Angebot",
+  seo_og_title: "Photovoltaik planen & PV-Angebot anfragen",
+  seo_og_description: "Kosten, Ersparnis, Speicher und Fördermöglichkeiten unverbindlich einschätzen und eine PV-Anfrage senden.",
+  seo_og_image: siteConfig.seo.ogImage,
+  hero_image_desktop_url: siteConfig.assets.heroDesktop,
+  hero_image_mobile_url: siteConfig.assets.heroMobile,
+  home_card_1_image_url: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80",
+  home_card_2_image_url: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1200&q=80",
+  home_card_3_image_url: "https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&w=1200&q=80",
   updated_at: null,
 };
 
@@ -220,25 +197,17 @@ const normalizeSettings = (row: Partial<PvCalculatorSettings> | null | undefined
   warranty_note: normalizeText(row?.warranty_note, DEFAULT_PV_SETTINGS.warranty_note),
   appointment_link: typeof row?.appointment_link === "string" ? row.appointment_link.trim() : DEFAULT_PV_SETTINGS.appointment_link,
   lead_receiver_label: normalizeText(row?.lead_receiver_label, DEFAULT_PV_SETTINGS.lead_receiver_label),
-  trust_primary_text: normalizeText(row?.trust_primary_text, DEFAULT_PV_SETTINGS.trust_primary_text),
-  trust_secondary_text: normalizeText(row?.trust_secondary_text, DEFAULT_PV_SETTINGS.trust_secondary_text),
-  hero_stat_1_label: normalizeText(row?.hero_stat_1_label, DEFAULT_PV_SETTINGS.hero_stat_1_label),
-  hero_stat_1_text: normalizeText(row?.hero_stat_1_text, DEFAULT_PV_SETTINGS.hero_stat_1_text),
-  hero_stat_2_label: normalizeText(row?.hero_stat_2_label, DEFAULT_PV_SETTINGS.hero_stat_2_label),
-  hero_stat_2_text: normalizeText(row?.hero_stat_2_text, DEFAULT_PV_SETTINGS.hero_stat_2_text),
-  hero_stat_3_label: normalizeText(row?.hero_stat_3_label, DEFAULT_PV_SETTINGS.hero_stat_3_label),
-  hero_stat_3_text: normalizeText(row?.hero_stat_3_text, DEFAULT_PV_SETTINGS.hero_stat_3_text),
-  decision_section_badge: normalizeText(row?.decision_section_badge, DEFAULT_PV_SETTINGS.decision_section_badge),
-  decision_section_headline: normalizeText(row?.decision_section_headline, DEFAULT_PV_SETTINGS.decision_section_headline),
-  decision_section_text: normalizeText(row?.decision_section_text, DEFAULT_PV_SETTINGS.decision_section_text),
-  process_section_badge: normalizeText(row?.process_section_badge, DEFAULT_PV_SETTINGS.process_section_badge),
-  process_section_headline: normalizeText(row?.process_section_headline, DEFAULT_PV_SETTINGS.process_section_headline),
-  process_section_text: normalizeText(row?.process_section_text, DEFAULT_PV_SETTINGS.process_section_text),
-  final_cta_badge: normalizeText(row?.final_cta_badge, DEFAULT_PV_SETTINGS.final_cta_badge),
-  final_cta_headline: normalizeText(row?.final_cta_headline, DEFAULT_PV_SETTINGS.final_cta_headline),
-  final_cta_text: normalizeText(row?.final_cta_text, DEFAULT_PV_SETTINGS.final_cta_text),
-  final_primary_cta_label: normalizeText(row?.final_primary_cta_label, DEFAULT_PV_SETTINGS.final_primary_cta_label),
-  final_secondary_cta_label: normalizeText(row?.final_secondary_cta_label, DEFAULT_PV_SETTINGS.final_secondary_cta_label),
+  seo_title: normalizeText(row?.seo_title, DEFAULT_PV_SETTINGS.seo_title),
+  seo_description: normalizeText(row?.seo_description, DEFAULT_PV_SETTINGS.seo_description),
+  seo_keywords: normalizeText(row?.seo_keywords, DEFAULT_PV_SETTINGS.seo_keywords),
+  seo_og_title: normalizeText(row?.seo_og_title, DEFAULT_PV_SETTINGS.seo_og_title),
+  seo_og_description: normalizeText(row?.seo_og_description, DEFAULT_PV_SETTINGS.seo_og_description),
+  seo_og_image: normalizeText(row?.seo_og_image, DEFAULT_PV_SETTINGS.seo_og_image),
+  hero_image_desktop_url: normalizeText(row?.hero_image_desktop_url, DEFAULT_PV_SETTINGS.hero_image_desktop_url),
+  hero_image_mobile_url: normalizeText(row?.hero_image_mobile_url, DEFAULT_PV_SETTINGS.hero_image_mobile_url),
+  home_card_1_image_url: normalizeText(row?.home_card_1_image_url, DEFAULT_PV_SETTINGS.home_card_1_image_url),
+  home_card_2_image_url: normalizeText(row?.home_card_2_image_url, DEFAULT_PV_SETTINGS.home_card_2_image_url),
+  home_card_3_image_url: normalizeText(row?.home_card_3_image_url, DEFAULT_PV_SETTINGS.home_card_3_image_url),
 });
 
 export function usePvSettings() {

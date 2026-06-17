@@ -63,12 +63,17 @@ export default function AdminChecklist() {
     { label: "Spezialisierung", ok: isFilled(settings?.company_specialization), hint: "PV, Speicher, Wallbox und Beratung sind klar beschrieben." },
     { label: "Rückmeldezeit", ok: isFilled(settings?.response_time_text), hint: "Interessenten sehen bzw. Betreiber kennen die erwartete Reaktionszeit." },
     { label: "Terminlink", ok: isFilled(settings?.appointment_link), hint: "Optional: Link zu Terminbuchung oder Beratungskalender." },
+    { label: "Hero-Bild Desktop", ok: isFilled(settings?.hero_image_desktop_url), hint: "Startseitenbild für Desktop ist im Admin hinterlegt.", critical: true },
+    { label: "Hero-Bild Mobile", ok: isFilled(settings?.hero_image_mobile_url), hint: "Mobiles Startseitenbild ist im Admin hinterlegt.", critical: true },
+    { label: "3 Startseiten-Bildkarten", ok: isFilled(settings?.home_card_1_image_url) && isFilled(settings?.home_card_2_image_url) && isFilled(settings?.home_card_3_image_url), hint: "Alle drei Bildkarten können über Einstellungen ersetzt werden." },
   ];
 
   const technicalChecks: CheckItem[] = [
     { label: "Datenbankverbindung", ok: Boolean(import.meta.env.VITE_SUPABASE_URL && (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY)), hint: "Website ist mit der richtigen Lead-Datenbank verbunden.", critical: true },
     { label: "Paket gesetzt", ok: Boolean(import.meta.env.VITE_PACKAGE_TIER), hint: `Aktives Paket: ${activePackageLabel}.`, critical: true },
-    { label: "OG-Bild", ok: isFilled(siteConfig.seo.ogImage), hint: "Wichtig für Vorschauen in Social Media und Messenger-Links." },
+    { label: "SEO-Titel", ok: isFilled(settings?.seo_title), hint: "Startseiten-Titel für Google und Browser-Tab ist gepflegt.", critical: true },
+    { label: "Meta Description", ok: isFilled(settings?.seo_description), hint: "Startseiten-Beschreibung für Suchmaschinen ist gepflegt.", critical: true },
+    { label: "Social-/OG-Bild", ok: isFilled(settings?.seo_og_image), hint: "Wichtig für Vorschauen in Social Media und Messenger-Links." },
     { label: "Weitere Verwaltungslinks", ok: externalToolLinks.length > 0, hint: "Optional: zusätzliche Verwaltungsbereiche können direkt verlinkt werden." },
   ];
 

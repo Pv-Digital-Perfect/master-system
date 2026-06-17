@@ -7,7 +7,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DEFAULT_BRAND_NAME, DEFAULT_SITE_DESCRIPTION } from "@/lib/constants";
-import { siteConfig } from "@/config/siteConfig";
 import { buildAbsoluteSiteUrl } from "@/lib/routes";
 import { hasPackageFeature, type PackageFeatureKey } from "@/config/packageConfig";
 import { DEFAULT_PV_SETTINGS, usePvSettings } from "@/hooks/usePvSettings";
@@ -96,29 +95,59 @@ const faq = [
   },
 ];
 
-const webSiteSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: DEFAULT_BRAND_NAME,
-  url: buildAbsoluteSiteUrl("/"),
-  description: DEFAULT_SITE_DESCRIPTION,
-};
+const heroHighlights = [
+  { label: "PV-Anlage", text: "Kosten und Größe grob einschätzen" },
+  { label: "Speicher", text: "Eigenverbrauch besser planen" },
+  { label: "Beratung", text: "Unverbindliche Anfrage senden" },
+];
 
 export default function Index() {
   const { data: runtimeSettings = DEFAULT_PV_SETTINGS } = usePvSettings();
   const availableModules = modules.filter((module) => hasPackageFeature(module.feature));
-  const heroHighlights = [
-    { label: runtimeSettings.hero_stat_1_label, text: runtimeSettings.hero_stat_1_text },
-    { label: runtimeSettings.hero_stat_2_label, text: runtimeSettings.hero_stat_2_text },
-    { label: runtimeSettings.hero_stat_3_label, text: runtimeSettings.hero_stat_3_text },
+  const seoTitle = runtimeSettings.seo_title || `${DEFAULT_BRAND_NAME} | Photovoltaik planen & PV-Angebot anfragen`;
+  const seoDescription = runtimeSettings.seo_description || DEFAULT_SITE_DESCRIPTION;
+  const socialTitle = runtimeSettings.seo_og_title || seoTitle;
+  const socialDescription = runtimeSettings.seo_og_description || seoDescription;
+  const socialImage = runtimeSettings.seo_og_image || runtimeSettings.hero_image_desktop_url;
+  const canonicalUrl = buildAbsoluteSiteUrl("/");
+  const webSiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: DEFAULT_BRAND_NAME,
+    url: canonicalUrl,
+    description: seoDescription,
+  };
+  const imageCards = [
+    {
+      image: runtimeSettings.home_card_1_image_url,
+      title: "PV-Anlage auf dem Dach",
+      text: "Dachfläche, Ausrichtung und Verbrauch bestimmen, wie gut eine Anlage zum Gebäude passt.",
+    },
+    {
+      image: runtimeSettings.home_card_2_image_url,
+      title: "Strom clever nutzen",
+      text: "Eigenverbrauch, Einspeisung und Speicher entscheiden über die langfristige Wirtschaftlichkeit.",
+    },
+    {
+      image: runtimeSettings.home_card_3_image_url,
+      title: "Energie für die Zukunft",
+      text: "PV, Speicher und Wallbox lassen sich früh gemeinsam planen und in Zukunft sinnvoll erweitern.",
+    },
   ];
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A]">
       <Helmet>
-        <title>{DEFAULT_BRAND_NAME} | Photovoltaik planen & PV-Angebot anfragen</title>
-        <meta name="description" content={DEFAULT_SITE_DESCRIPTION} />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/")} />
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        {runtimeSettings.seo_keywords ? <meta name="keywords" content={runtimeSettings.seo_keywords} /> : null}
+        <meta property="og:title" content={socialTitle} />
+        <meta property="og:description" content={socialDescription} />
+        <meta property="og:image" content={socialImage} />
+        <meta name="twitter:title" content={socialTitle} />
+        <meta name="twitter:description" content={socialDescription} />
+        <meta name="twitter:image" content={socialImage} />
+        <link rel="canonical" href={canonicalUrl} />
         <script type="application/ld+json">{JSON.stringify(webSiteSchema)}</script>
       </Helmet>
       <Header transparent />
@@ -147,8 +176,8 @@ export default function Index() {
                   </Button>
                 </div>
                 <div className="mt-8 grid gap-3 text-sm font-bold text-slate-600 sm:grid-cols-2">
-                  <Trust icon={<ShieldCheck className="h-5 w-5" />} text={runtimeSettings.trust_primary_text} />
-                  <Trust icon={<CheckCircle2 className="h-5 w-5" />} text={runtimeSettings.trust_secondary_text || runtimeSettings.response_time_text} />
+                  <Trust icon={<ShieldCheck className="h-5 w-5" />} text="Unverbindliche Ersteinschätzung" />
+                  <Trust icon={<CheckCircle2 className="h-5 w-5" />} text={runtimeSettings.response_time_text} />
                 </div>
                 <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-950">
                   {runtimeSettings.company_specialization} · Einsatzgebiet: {runtimeSettings.service_area_text}
@@ -160,9 +189,9 @@ export default function Index() {
                   <CardContent className="p-4 md:p-6">
                     <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0F172A]">
                       <picture>
-                        <source media="(max-width: 767px)" srcSet={siteConfig.assets.heroMobile} />
+                        <source media="(max-width: 767px)" srcSet={runtimeSettings.hero_image_mobile_url} />
                         <img
-                          src={siteConfig.assets.heroDesktop}
+                          src={runtimeSettings.hero_image_desktop_url}
                           alt="Modernes Solar- und Strommotiv für Photovoltaikplanung"
                           className="h-[300px] w-full object-cover sm:h-[380px] lg:h-[500px]"
                           loading="eager"
@@ -211,9 +240,9 @@ export default function Index() {
         <section className="bg-white py-16 md:py-24">
           <div className="container mx-auto grid gap-10 px-4 lg:grid-cols-2 lg:items-center">
             <div>
-              <div className="mb-4 inline-flex rounded-full border border-[#808080]/20 bg-[#F8FAFC] px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#22C55E]">{runtimeSettings.decision_section_badge}</div>
-              <h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] text-[#0F172A] md:text-5xl">{runtimeSettings.decision_section_headline}</h2>
-              <p className="mt-5 text-lg leading-relaxed text-slate-600">{runtimeSettings.decision_section_text}</p>
+              <div className="mb-4 inline-flex rounded-full border border-[#808080]/20 bg-[#F8FAFC] px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#22C55E]">Planung mit Struktur</div>
+              <h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] text-[#0F172A] md:text-5xl">Damit Ihre PV-Anfrage von Anfang an richtig eingeschätzt werden kann.</h2>
+              <p className="mt-5 text-lg leading-relaxed text-slate-600">Eine Photovoltaikanlage ist immer individuell. Deshalb werden Verbrauch, Dach, Speicherwunsch und Zeitplan direkt strukturiert erfasst.</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {benefits.map((benefit) => (
@@ -227,9 +256,9 @@ export default function Index() {
           <div className="container mx-auto px-4">
             <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
               <div>
-                <div className="mb-4 inline-flex rounded-full border border-[#808080]/20 bg-white px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#F97316]">{runtimeSettings.process_section_badge}</div>
-                <h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">{runtimeSettings.process_section_headline}</h2>
-                <p className="mt-5 text-lg leading-relaxed text-slate-600">{runtimeSettings.process_section_text}</p>
+                <div className="mb-4 inline-flex rounded-full border border-[#808080]/20 bg-white px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#F97316]">Ablauf</div>
+                <h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">Von der ersten Einschätzung zur persönlichen Beratung.</h2>
+                <p className="mt-5 text-lg leading-relaxed text-slate-600">Sie erhalten eine schnelle Orientierung und können danach direkt eine kostenlose Anfrage für Ihr PV-Projekt absenden.</p>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 {processSteps.map((step, index) => <Step key={step.title} number={index + 1} title={step.title} text={step.text} />)}
@@ -258,23 +287,7 @@ export default function Index() {
             </div>
 
             <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {[
-                {
-                  image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80",
-                  title: "PV-Anlage auf dem Dach",
-                  text: "Dachfläche, Ausrichtung und Verbrauch bestimmen, wie gut eine Anlage zum Gebäude passt.",
-                },
-                {
-                  image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1200&q=80",
-                  title: "Strom clever nutzen",
-                  text: "Eigenverbrauch, Einspeisung und Speicher entscheiden über die langfristige Wirtschaftlichkeit.",
-                },
-                {
-                  image: "https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&w=1200&q=80",
-                  title: "Energie für die Zukunft",
-                  text: "PV, Speicher und Wallbox lassen sich früh gemeinsam planen und in Zukunft sinnvoll erweitern.",
-                },
-              ].map((item) => (
+              {imageCards.map((item) => (
                 <Card key={item.title} className="overflow-hidden border border-[#808080]/20 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10">
                   <div className="aspect-[4/3] overflow-hidden bg-slate-100">
                     <img src={item.image} alt={item.title} className="h-full w-full object-cover transition duration-500 hover:scale-105" loading="lazy" />
@@ -308,13 +321,13 @@ export default function Index() {
               <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-[#22C55E]/10 blur-3xl" />
               <div className="relative grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
                 <div>
-                  <div className="mb-4 flex items-center gap-2 text-sm font-extrabold uppercase tracking-[0.18em] text-orange-200"><ShieldCheck className="h-4 w-4" /> {runtimeSettings.final_cta_badge}</div>
-                  <h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] text-white md:text-5xl">{runtimeSettings.final_cta_headline}</h2>
-                  <p className="mt-4 max-w-2xl text-slate-300">{runtimeSettings.final_cta_text}</p>
+                  <div className="mb-4 flex items-center gap-2 text-sm font-extrabold uppercase tracking-[0.18em] text-orange-200"><ShieldCheck className="h-4 w-4" /> Saubere Ersteinschätzung</div>
+                  <h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] text-white md:text-5xl">Bereit für Ihre PV-Anfrage?</h2>
+                  <p className="mt-4 max-w-2xl text-slate-300">Starten Sie mit dem PV-Rechner oder senden Sie Ihre Eckdaten direkt für eine unverbindliche Rückmeldung ab.</p>
                 </div>
                 <div className="flex flex-col gap-4 sm:flex-row lg:justify-end">
-                  <Button asChild size="lg" className="h-14 rounded-full bg-[#F97316] px-8 font-extrabold text-white hover:bg-orange-600"><Link to="/pv-rechner">{runtimeSettings.final_primary_cta_label}</Link></Button>
-                  <Button asChild size="lg" variant="outline" className="h-14 rounded-full border-white/20 bg-white/10 px-8 font-extrabold text-white hover:bg-white/20"><Link to="/angebot-anfordern">{runtimeSettings.final_secondary_cta_label}</Link></Button>
+                  <Button asChild size="lg" className="h-14 rounded-full bg-[#F97316] px-8 font-extrabold text-white hover:bg-orange-600"><Link to="/pv-rechner">PV berechnen</Link></Button>
+                  <Button asChild size="lg" variant="outline" className="h-14 rounded-full border-white/20 bg-white/10 px-8 font-extrabold text-white hover:bg-white/20"><Link to="/angebot-anfordern">Anfrage senden</Link></Button>
                 </div>
               </div>
             </div>
