@@ -28,7 +28,6 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 import { DEFAULT_PV_SETTINGS, calculatePvResult, formatEuro, formatNumber, usePvSettings } from "@/hooks/usePvSettings";
 
 const clampSliderValue = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
@@ -65,7 +64,6 @@ export default function PvCalculator() {
       <Helmet>
         <title>PV-Rechner | Photovoltaik Kosten & Ersparnis berechnen</title>
         <meta name="description" content="Moderner PV-Rechner für Photovoltaik-Kosten, Speicher, Wallbox, Ersparnis und Amortisation als unverbindliche Ersteinschätzung." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/pv-rechner")} />
       </Helmet>
       <Header />
 

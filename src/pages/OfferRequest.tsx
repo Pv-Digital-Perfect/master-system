@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 import { notifyLeadByEmail } from "@/lib/leadNotifications";
 
 const PRIVACY_CONSENT_VERSION = "pv-request-2026-06-17";
@@ -141,7 +140,6 @@ export default function OfferRequest() {
       <Helmet>
         <title>PV-Angebot anfordern | Photovoltaik Beratung</title>
         <meta name="description" content="Fordere eine strukturierte Photovoltaik-Anfrage an: Eigentümerstatus, Dachart, Dachfläche, Stromverbrauch, Speicherwunsch, Wallbox und Zeitrahmen erfassen." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/angebot-anfordern")} />
       </Helmet>
       <Header />
 

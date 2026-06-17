@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DEFAULT_BRAND_NAME, DEFAULT_SITE_DESCRIPTION } from "@/lib/constants";
+import { siteConfig } from "@/config/siteConfig";
 import { buildAbsoluteSiteUrl } from "@/lib/routes";
 import { hasPackageFeature, type PackageFeatureKey } from "@/config/packageConfig";
 import { DEFAULT_PV_SETTINGS, usePvSettings } from "@/hooks/usePvSettings";
@@ -101,53 +102,23 @@ const heroHighlights = [
   { label: "Beratung", text: "Unverbindliche Anfrage senden" },
 ];
 
+const webSiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: DEFAULT_BRAND_NAME,
+  url: buildAbsoluteSiteUrl("/"),
+  description: DEFAULT_SITE_DESCRIPTION,
+};
+
 export default function Index() {
   const { data: runtimeSettings = DEFAULT_PV_SETTINGS } = usePvSettings();
   const availableModules = modules.filter((module) => hasPackageFeature(module.feature));
-  const seoTitle = runtimeSettings.seo_title || `${DEFAULT_BRAND_NAME} | Photovoltaik planen & PV-Angebot anfragen`;
-  const seoDescription = runtimeSettings.seo_description || DEFAULT_SITE_DESCRIPTION;
-  const socialTitle = runtimeSettings.seo_og_title || seoTitle;
-  const socialDescription = runtimeSettings.seo_og_description || seoDescription;
-  const socialImage = runtimeSettings.seo_og_image || runtimeSettings.hero_image_desktop_url;
-  const canonicalUrl = buildAbsoluteSiteUrl("/");
-  const webSiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: DEFAULT_BRAND_NAME,
-    url: canonicalUrl,
-    description: seoDescription,
-  };
-  const imageCards = [
-    {
-      image: runtimeSettings.home_card_1_image_url,
-      title: "PV-Anlage auf dem Dach",
-      text: "Dachfläche, Ausrichtung und Verbrauch bestimmen, wie gut eine Anlage zum Gebäude passt.",
-    },
-    {
-      image: runtimeSettings.home_card_2_image_url,
-      title: "Strom clever nutzen",
-      text: "Eigenverbrauch, Einspeisung und Speicher entscheiden über die langfristige Wirtschaftlichkeit.",
-    },
-    {
-      image: runtimeSettings.home_card_3_image_url,
-      title: "Energie für die Zukunft",
-      text: "PV, Speicher und Wallbox lassen sich früh gemeinsam planen und in Zukunft sinnvoll erweitern.",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A]">
       <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        {runtimeSettings.seo_keywords ? <meta name="keywords" content={runtimeSettings.seo_keywords} /> : null}
-        <meta property="og:title" content={socialTitle} />
-        <meta property="og:description" content={socialDescription} />
-        <meta property="og:image" content={socialImage} />
-        <meta name="twitter:title" content={socialTitle} />
-        <meta name="twitter:description" content={socialDescription} />
-        <meta name="twitter:image" content={socialImage} />
-        <link rel="canonical" href={canonicalUrl} />
+        <title>{DEFAULT_BRAND_NAME} | Photovoltaik planen & PV-Angebot anfragen</title>
+        <meta name="description" content={DEFAULT_SITE_DESCRIPTION} />
         <script type="application/ld+json">{JSON.stringify(webSiteSchema)}</script>
       </Helmet>
       <Header transparent />
@@ -189,9 +160,9 @@ export default function Index() {
                   <CardContent className="p-4 md:p-6">
                     <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0F172A]">
                       <picture>
-                        <source media="(max-width: 767px)" srcSet={runtimeSettings.hero_image_mobile_url} />
+                        <source media="(max-width: 767px)" srcSet={siteConfig.assets.heroMobile} />
                         <img
-                          src={runtimeSettings.hero_image_desktop_url}
+                          src={siteConfig.assets.heroDesktop}
                           alt="Modernes Solar- und Strommotiv für Photovoltaikplanung"
                           className="h-[300px] w-full object-cover sm:h-[380px] lg:h-[500px]"
                           loading="eager"
@@ -287,7 +258,23 @@ export default function Index() {
             </div>
 
             <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {imageCards.map((item) => (
+              {[
+                {
+                  image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80",
+                  title: "PV-Anlage auf dem Dach",
+                  text: "Dachfläche, Ausrichtung und Verbrauch bestimmen, wie gut eine Anlage zum Gebäude passt.",
+                },
+                {
+                  image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1200&q=80",
+                  title: "Strom clever nutzen",
+                  text: "Eigenverbrauch, Einspeisung und Speicher entscheiden über die langfristige Wirtschaftlichkeit.",
+                },
+                {
+                  image: "https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&w=1200&q=80",
+                  title: "Energie für die Zukunft",
+                  text: "PV, Speicher und Wallbox lassen sich früh gemeinsam planen und in Zukunft sinnvoll erweitern.",
+                },
+              ].map((item) => (
                 <Card key={item.title} className="overflow-hidden border border-[#808080]/20 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10">
                   <div className="aspect-[4/3] overflow-hidden bg-slate-100">
                     <img src={item.image} alt={item.title} className="h-full w-full object-cover transition duration-500 hover:scale-105" loading="lazy" />

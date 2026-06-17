@@ -5,7 +5,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Calculator, FileText, Mail, ShieldCheck } from "lucide-react";
 import { DEFAULT_BRAND_NAME, DEFAULT_CONTACT_EMAIL } from "@/lib/constants";
 import { siteConfig } from "@/config/siteConfig";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
 export default function AGB() {
   return (
@@ -13,7 +12,6 @@ export default function AGB() {
       <Helmet>
         <title>Nutzungsbedingungen | {DEFAULT_BRAND_NAME}</title>
         <meta name="description" content="Nutzungsbedingungen für die Verwendung der Photovoltaik-Website, Rechner, Informationsseiten und Anfrageformulare." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/agb")} />
       </Helmet>
       <Header />
       <main className="pt-[72px]">

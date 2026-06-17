@@ -5,7 +5,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
 const fundingFactors = [
   "Bundesland und Gemeinde",
@@ -21,7 +20,6 @@ export default function Funding() {
       <Helmet>
         <title>Photovoltaik Förderung | PV-Förderung prüfen</title>
         <meta name="description" content="Photovoltaik Förderung sicher einordnen: Bundesland, Speicher, Wallbox und Einreichzeitpunkt prüfen und eine strukturierte PV-Anfrage starten." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/foerderung")} />
       </Helmet>
       <Header />
       <main className="pt-[72px]">

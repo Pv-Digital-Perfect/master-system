@@ -14,7 +14,6 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { DEFAULT_CONTACT_EMAIL } from "@/lib/constants";
 import { siteConfig } from "@/config/siteConfig";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 import { notifyLeadByEmail } from "@/lib/leadNotifications";
 
 const PRIVACY_CONSENT_VERSION = "contact-form-2026-06-17";
@@ -80,7 +79,6 @@ export default function Contact() {
       <Helmet key={location.pathname} prioritizeSeoTags defer={false}>
         <title>Kontakt | Photovoltaik Beratung</title>
         <meta name="description" content="Kontakt für Photovoltaik, Stromspeicher und Wallbox: Anfrage, Rückruf oder Projektbesprechung starten." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/kontakt")} />
       </Helmet>
       <Header />
 

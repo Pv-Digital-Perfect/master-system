@@ -5,7 +5,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
 const costBlocks = [
   { icon: SunMedium, title: "PV-Module & Wechselrichter", text: "Grundlage der Anlage. Preis und Leistung hängen von Qualität, Dachfläche, Wechselrichterkonzept und technischer Auslegung ab." },
@@ -26,7 +25,6 @@ export default function PhotovoltaicCosts() {
       <Helmet>
         <title>Photovoltaik Kosten | PV-Anlage kalkulieren</title>
         <meta name="description" content="Photovoltaik Kosten verständlich erklärt: Anlagengröße, Speicher, Dach, Montage, Elektroarbeiten und Netzanschluss beeinflussen die Investition." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/photovoltaik-kosten")} />
       </Helmet>
       <Header />
       <main className="pt-[72px]">

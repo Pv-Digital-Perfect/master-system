@@ -5,7 +5,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
 const references = [
   { title: "Einfamilienhaus", location: "Linz Umgebung", details: "8,6 kWp · Speicher vorbereitet · Eigenverbrauch optimiert" },
@@ -19,7 +18,6 @@ export default function References() {
       <Helmet>
         <title>PV Referenzen | Photovoltaik Projekte</title>
         <meta name="description" content="Beispiele für Photovoltaik-Projekte mit PV-Leistung, Speicheroption, Region und Nutzen übersichtlich dargestellt." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/referenzen")} />
       </Helmet>
       <Header />
       <main className="pt-[72px]">

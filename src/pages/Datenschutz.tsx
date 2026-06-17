@@ -5,7 +5,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Cookie, Database, FileText, Mail, Server, ShieldCheck, UserCheck } from "lucide-react";
 import { DEFAULT_BRAND_NAME, DEFAULT_CONTACT_EMAIL } from "@/lib/constants";
 import { siteConfig } from "@/config/siteConfig";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
 export default function Datenschutz() {
   const { legal } = siteConfig;
@@ -15,7 +14,6 @@ export default function Datenschutz() {
       <Helmet>
         <title>Datenschutzerklärung | {DEFAULT_BRAND_NAME}</title>
         <meta name="description" content="Datenschutzerklärung zur Verarbeitung personenbezogener Daten bei Kontaktanfragen, PV-Anfragen, Cookies und technischer Bereitstellung." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/datenschutz")} />
       </Helmet>
       <Header />
       <main className="pt-[72px]">

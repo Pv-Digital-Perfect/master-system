@@ -5,7 +5,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Mail, MapPin, ShieldCheck, FileText, Info, Phone, Building2 } from "lucide-react";
 import { DEFAULT_BRAND_NAME, DEFAULT_CONTACT_EMAIL, DEFAULT_SITE_URL } from "@/lib/constants";
 import { siteConfig } from "@/config/siteConfig";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
 export default function Impressum() {
   const { legal, contact } = siteConfig;
@@ -15,7 +14,6 @@ export default function Impressum() {
       <Helmet>
         <title>Impressum | {DEFAULT_BRAND_NAME}</title>
         <meta name="description" content="Impressum, Anbieterkennzeichnung und Kontaktinformationen der Photovoltaik-Website." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/impressum")} />
       </Helmet>
       <Header />
       <main className="pt-[72px]">

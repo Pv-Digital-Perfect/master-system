@@ -9,7 +9,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 import { formatEuro, formatNumber, usePvSettings } from "@/hooks/usePvSettings";
 
 export default function SavingsCalculator() {
@@ -46,7 +45,6 @@ export default function SavingsCalculator() {
       <Helmet>
         <title>Stromkosten sparen mit Photovoltaik | PV-Ersparnisrechner</title>
         <meta name="description" content="Berechnen Sie unverbindlich, wie viel Stromkosten eine Photovoltaikanlage durch Eigenverbrauch und Einspeisung sparen kann." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/stromkosten-sparen")} />
       </Helmet>
       <Header />
 

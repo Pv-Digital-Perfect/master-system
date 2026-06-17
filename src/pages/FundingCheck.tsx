@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
 const states = [
   "Burgenland",
@@ -42,7 +41,6 @@ export default function FundingCheck() {
       <Helmet>
         <title>PV Förder-Check Österreich | Photovoltaik Förderung prüfen</title>
         <meta name="description" content="Unverbindlicher PV Förder-Check für Photovoltaik, Speicher und Wallbox. Fördermöglichkeiten je Bundesland als Beratungsanfrage prüfen lassen." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/foerder-check")} />
       </Helmet>
       <Header />
 

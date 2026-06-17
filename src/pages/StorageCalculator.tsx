@@ -9,7 +9,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { buildAbsoluteSiteUrl } from "@/lib/routes";
 import { formatEuro, usePvSettings } from "@/hooks/usePvSettings";
 
 export default function StorageCalculator() {
@@ -36,7 +35,6 @@ export default function StorageCalculator() {
       <Helmet>
         <title>Stromspeicher Rechner | Speichergröße für PV-Anlage schätzen</title>
         <meta name="description" content="Schätzen Sie unverbindlich, welche Speichergröße zu Stromverbrauch, PV-Anlage und Abendverbrauch passt." />
-        <link rel="canonical" href={buildAbsoluteSiteUrl("/speicher-rechner")} />
       </Helmet>
       <Header />
 
