@@ -542,7 +542,7 @@ export type Database = {
       }
       projects: {
         Row: {
-          affiliate_link: string
+          external_link: string
           badge_text: string | null
           category_id: string | null
           country_scope: Database["public"]["Enums"]["country_scope"]
@@ -562,7 +562,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
-          affiliate_link: string
+          external_link: string
           badge_text?: string | null
           category_id?: string | null
           country_scope?: Database["public"]["Enums"]["country_scope"]
@@ -582,7 +582,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
-          affiliate_link?: string
+          external_link?: string
           badge_text?: string | null
           category_id?: string | null
           country_scope?: Database["public"]["Enums"]["country_scope"]

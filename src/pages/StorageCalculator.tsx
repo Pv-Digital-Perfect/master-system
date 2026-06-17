@@ -46,7 +46,7 @@ export default function StorageCalculator() {
             <div className="max-w-4xl">
               <div className="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-green-200">Speicher-Rechner</div>
               <h1 className="font-display text-4xl font-extrabold tracking-[-0.045em] md:text-6xl">Welche Speichergröße passt zur PV-Anlage?</h1>
-              <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-300">Der Speicher-Rechner qualifiziert Interessenten, bevor der Anbieter Zeit investiert. Er zeigt eine verständliche Speicherempfehlung ohne verbindliches Angebot zu versprechen.</p>
+              <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-300">Der Speicher-Rechner zeigt eine verständliche erste Einschätzung, welche Speichergröße zu Verbrauch, PV-Leistung und typischem Abendverbrauch passen kann.</p>
             </div>
           </div>
         </section>

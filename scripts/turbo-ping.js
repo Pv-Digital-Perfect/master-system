@@ -11,27 +11,23 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const KEY_FILE = path.resolve(__dirname, '../service-account.json');
-const DOMAIN = process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://tiertarif.com';
+const DOMAIN = process.env.VITE_SITE_URL || process.env.SITE_URL || 'https://pv-system.digital-perfect.com';
 
-// HIER DEINE 10 URLS EINTRAGEN (Das ist Pflicht!)
 const URLS_TO_INDEX = [
-  '/hundekrankenversicherung-vergleich',
-  '/pkv-beamte-vergleich',
-'/unfallversicherung-vergleich',
-'/lebensversicherung-vergleich',
-'/rentenversicherung-vergleich',
-'/berufsunfaehigkeit-versicherung-vergleich',
-'/pkv-vollversicherung',
-'/kreditkarten-vergleich',
-'/baufinanzierung-vergleich',
-'/stromvergleich',
-'/forum/strompreisvergleich-2026-abzocke-stoppen',
-'/gadgets-gegen-nackenschmerzen',
-'/dsl-vergleich-standard-portal',
+  '/',
+  '/pv-rechner',
+  '/stromkosten-sparen',
+  '/speicher-rechner',
+  '/foerder-check',
+  '/photovoltaik-kosten',
+  '/foerderung',
+  '/referenzen',
+  '/angebot-anfordern',
+  '/kontakt',
 ];
 
 async function fastPin() {
-  console.log('🔧 Portal Diagnose-Ping startet...');
+  console.log('🔧 PV-System Diagnose-Ping startet...');
 
   if (!fs.existsSync(KEY_FILE)) {
     console.error(`❌ FEHLER: Key fehlt unter: ${KEY_FILE}`);

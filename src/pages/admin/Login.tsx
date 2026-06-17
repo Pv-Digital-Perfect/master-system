@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Search, Loader2 } from "lucide-react";
+import { Zap, Loader2 } from "lucide-react";
 
 export default function AdminLogin() {
   const { signIn, user, isLoading: authLoading } = useAuth();
@@ -73,11 +73,11 @@ export default function AdminLogin() {
         <CardHeader className="text-center">
           <Link to="/" className="inline-flex items-center justify-center gap-2 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#0E1F53]">
-              <Search className="w-5 h-5 text-primary-foreground" />
+              <Zap className="w-5 h-5 text-primary-foreground" />
             </div>
           </Link>
           <CardTitle className="font-display text-2xl">Admin Login</CardTitle>
-          <CardDescription>Melde dich mit Supabase Auth an, um das Portal zu verwalten.</CardDescription>
+          <CardDescription>Melde dich mit Supabase Auth an, um die PV-Anfragen zu verwalten.</CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -87,7 +87,7 @@ export default function AdminLogin() {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@tiertarif.com"
+                placeholder="admin@pv-system.at"
                 {...register("email")}
                 className="bg-muted/50"
               />

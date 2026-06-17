@@ -5,4 +5,4 @@ Disallow: /admin/login
 Disallow: /auth/
 Disallow: /my-account/
 
-Sitemap: https://pv-system.digital-perfect.com/sitemap.xml
+Sitemap: http://pv-anlage.digital-perfect.com/sitemap.xml

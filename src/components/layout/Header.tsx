@@ -4,15 +4,7 @@ import { Menu, X, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_BRAND_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { label: "PV-Rechner", url: "/pv-rechner" },
-  { label: "Ersparnis", url: "/stromkosten-sparen" },
-  { label: "Speicher", url: "/speicher-rechner" },
-  { label: "Förder-Check", url: "/foerder-check" },
-  { label: "Kosten", url: "/photovoltaik-kosten" },
-  { label: "Referenzen", url: "/referenzen" },
-];
+import { getAvailableNavigationLinks, hasPackageFeature } from "@/config/packageConfig";
 
 interface HeaderProps {
   transparent?: boolean;
@@ -21,6 +13,8 @@ interface HeaderProps {
 export const Header = ({ transparent = false }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const navLinks = getAvailableNavigationLinks();
+  const subtitle = hasPackageFeature("storageCalculator") ? "Photovoltaik & Stromspeicher" : "Photovoltaik & Beratung";
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -62,7 +56,7 @@ export const Header = ({ transparent = false }: HeaderProps) => {
             </div>
             <div className="min-w-0 leading-tight">
               <div className="truncate text-lg font-black tracking-tight text-slate-950 md:text-xl">{DEFAULT_BRAND_NAME}</div>
-              <div className="hidden text-xs font-bold uppercase tracking-[0.18em] text-[#F97316] sm:block">Photovoltaik & Stromspeicher</div>
+              <div className="hidden text-xs font-bold uppercase tracking-[0.18em] text-[#F97316] sm:block">{subtitle}</div>
             </div>
           </Link>
 

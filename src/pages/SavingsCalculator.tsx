@@ -69,7 +69,7 @@ export default function SavingsCalculator() {
                 <InputNumber label="Jährlicher Stromverbrauch" value={consumption} suffix="kWh" onChange={setConsumption} />
                 <SliderBlock label="PV-Anlagengröße" value={pvSize} min={3} max={20} step={0.5} suffix="kWp" helper="Typische Einfamilienhäuser liegen oft zwischen 5 und 12 kWp." onChange={setPvSize} />
                 <SliderBlock label="Eigenverbrauchsanteil" value={selfUseRate} min={25} max={80} step={1} suffix="%" helper="Mit Speicher steigt der Eigenverbrauch deutlich." onChange={setSelfUseRate} />
-                <SliderBlock label="Strompreis" value={electricityPrice} min={18} max={45} step={1} suffix="ct/kWh" helper="Kann später pro Anbieter im Admin angepasst werden." onChange={setElectricityPrice} />
+                <SliderBlock label="Strompreis" value={electricityPrice} min={18} max={45} step={1} suffix="ct/kWh" helper="Kann je nach Stromtarif und Standort angepasst werden." onChange={setElectricityPrice} />
               </CardContent>
             </Card>
 

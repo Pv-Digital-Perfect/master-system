@@ -55,7 +55,7 @@ export default function PhotovoltaicCosts() {
           <div className="container mx-auto grid gap-10 px-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div>
               <div className="mb-4 inline-flex rounded-full border border-[#808080]/20 bg-[#F8FAFC] px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#22C55E]">Beispiel-Struktur</div>
-              <h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">So wird aus Kosteninteresse ein qualifizierter Lead.</h2>
+              <h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">So entsteht aus ersten Kostenfragen eine fundierte Projektgrundlage.</h2>
               <p className="mt-5 text-lg leading-relaxed text-slate-600">Die Seite erklärt nicht nur Preise, sondern leitet in die passende Aktion: Rechner nutzen, Speicher prüfen oder Angebot anfordern.</p>
             </div>
             <div className="grid gap-4">
@@ -67,7 +67,7 @@ export default function PhotovoltaicCosts() {
         <section className="container mx-auto px-4 py-16 md:py-24">
           <div className="rounded-[2rem] border border-[#808080]/20 bg-[#0F172A] p-8 text-white md:p-12">
             <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
-              <div><div className="mb-4 flex items-center gap-2 text-sm font-extrabold uppercase tracking-[0.18em] text-orange-200"><ShieldCheck className="h-4 w-4" /> unverbindlich</div><h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">Kein fixer Preis ohne Dachprüfung.</h2><p className="mt-4 text-slate-300">Das System bleibt bewusst seriös: Es zeigt eine realistische Schätzung und führt zur Beratung, statt falsche Preisversprechen zu machen.</p></div>
+              <div><div className="mb-4 flex items-center gap-2 text-sm font-extrabold uppercase tracking-[0.18em] text-orange-200"><ShieldCheck className="h-4 w-4" /> unverbindlich</div><h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">Kein fixer Preis ohne Dachprüfung.</h2><p className="mt-4 text-slate-300">Die Einschätzung bleibt bewusst seriös: Sie zeigt realistische Richtwerte und ersetzt keine technische Prüfung vor Ort.</p></div>
               <Button asChild size="lg" className="h-14 rounded-full bg-[#F97316] px-8 font-extrabold text-white hover:bg-orange-600 lg:justify-self-end"><Link to="/angebot-anfordern">Kosten prüfen lassen</Link></Button>
             </div>
           </div>

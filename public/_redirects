@@ -1,1 +1,1 @@
-# Deployment-specific redirects belong in Cloudflare/Nginx for each white-label domain.
+# Projektbezogene Redirects werden je Deployment in Cloudflare oder Nginx gepflegt.

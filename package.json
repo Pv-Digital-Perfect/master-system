@@ -1,11 +1,11 @@
 {
-  "name": "pv-lead-system-pro",
+  "name": "pv-system",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run sitemap && vite build",
     "sitemap": "node scripts/generate-sitemap.js",
     "ping": "node scripts/turbo-ping.js",
     "build:dev": "vite build --mode development",
@@ -96,7 +96,6 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
-    "lovable-tagger": "^1.1.13",
     "postcss": "^8.5.6",
     "supabase": "^2.78.1",
     "tailwindcss": "^3.4.17",
@@ -109,5 +108,5 @@
     "jsdom": "^25.0.1",
     "vitest": "^2.1.9"
   },
-  "description": "White-label PV lead system for photovoltaic providers"
+  "description": "Photovoltaic planning website with calculators, request form and protected project administration"
 }

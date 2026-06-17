@@ -83,7 +83,7 @@ export default function AdminSettings() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2"><Database className="h-5 w-5 text-orange-500" /> Supabase</CardTitle>
-            <CardDescription>Neue PV-Datenbank ohne TierTarif-Abhängigkeit.</CardDescription>
+            <CardDescription>PV-Datenbank mit getrennten Regeln für öffentliche Anfragen und geschützte Verwaltung.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2"><Label>Project URL</Label><Input readOnly value={supabaseUrl || "Nicht gesetzt"} /></div>
@@ -137,10 +137,10 @@ export default function AdminSettings() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><KeyRound className="h-5 w-5 text-slate-700" /> Nächste Ausbaustufe</CardTitle>
-          <CardDescription>Nach dem Rechner kommen White-Label-Felder, Kalenderlink und Mail-Benachrichtigung.</CardDescription>
+          <CardDescription>Als nächste Ausbaustufe folgen Betreiberangaben, Kalenderlink und E-Mail-Benachrichtigung.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3 md:grid-cols-3">
-          <Badge variant="outline" className="justify-center rounded-full py-2">White-Label Felder</Badge>
+          <Badge variant="outline" className="justify-center rounded-full py-2">Betreiberangaben</Badge>
           <Badge variant="outline" className="justify-center rounded-full py-2">Kalenderlink</Badge>
           <Badge variant="outline" className="justify-center rounded-full py-2">E-Mail-Benachrichtigung</Badge>
         </CardContent>

@@ -1,7 +1,7 @@
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// TierTarif Preloader: bewusst ohne alte Slate/Rank-Scout-Farben.
+// PV Preloader.
 type LoadingScreenProps = {
   mode?: "fullscreen" | "overlay";
 };
@@ -38,7 +38,7 @@ export const LoadingScreen = ({ mode = "fullscreen" }: LoadingScreenProps) => {
         </div>
 
         <div className={cn("flex flex-col", isOverlay ? "items-start gap-1" : "items-center gap-2")}> 
-          <h2 className="font-display text-xl font-black tracking-tight text-white">TierTarif</h2>
+          <h2 className="font-display text-xl font-black tracking-tight text-white">PV-System</h2>
           <p className="text-xs uppercase tracking-[0.2em] text-[#FAF7F0]/78 animate-pulse">
             Portal wird geladen...
           </p>

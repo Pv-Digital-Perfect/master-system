@@ -14,7 +14,7 @@ type AdminNavItem = {
 
 const navItems: AdminNavItem[] = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
-  { label: "PV-Leads", icon: MessageSquare, path: "/admin/leads" },
+  { label: "PV-Anfragen", icon: MessageSquare, path: "/admin/leads" },
   { label: "Einstellungen", icon: Settings, path: "/admin/settings" },
 ];
 
@@ -64,10 +64,10 @@ export default function AdminLayout() {
             <div className="rounded-2xl border border-sidebar-border bg-white/5 p-4">
               <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-sidebar-foreground/70">
                 <ShieldCheck className="h-4 w-4 text-sidebar-primary" />
-                Lead-System Control
+                Projektsteuerung
               </div>
               <p className="mt-2 text-sm leading-relaxed text-sidebar-foreground/82">
-                PV-Anfragen, Systemdaten und White-Label-Einstellungen zentral steuern.
+                PV-Anfragen, Rechnerwerte und Website-Einstellungen zentral steuern.
               </p>
             </div>
           </div>
@@ -113,12 +113,12 @@ export default function AdminLayout() {
           <div className="hidden sticky top-0 z-20 border-b border-border bg-card/92 backdrop-blur-md lg:block">
             <div className="flex h-20 items-center justify-between px-8">
               <div>
-                <div className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">PV Lead System / Admin</div>
+                <div className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">PV-Projektverwaltung</div>
                 <h1 className="mt-1 text-2xl font-black tracking-tight text-secondary">{currentTitle}</h1>
               </div>
               <div className="inline-flex items-center gap-2 rounded-full border border-secondary/35 bg-secondary/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-secondary shadow-sm shadow-secondary/10">
                 <ShieldCheck className="h-4 w-4" />
-                RLS Pflicht für Leads
+                RLS aktiv
               </div>
             </div>
           </div>

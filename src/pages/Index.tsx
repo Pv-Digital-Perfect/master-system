@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import type { ReactNode } from "react";
-import { ArrowRight, BatteryCharging, BarChart3, CalendarCheck, CheckCircle2, FileText, HelpCircle, Home, LineChart, PlugZap, ShieldCheck, Sparkles, SunMedium, Zap } from "lucide-react";
+import { ArrowRight, BatteryCharging, BarChart3, CalendarCheck, CheckCircle2, FileText, HelpCircle, Home, LineChart, PlugZap, ShieldCheck, Sparkles, SunMedium, Zap, type LucideIcon } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DEFAULT_BRAND_NAME, DEFAULT_SITE_DESCRIPTION } from "@/lib/constants";
 import { buildAbsoluteSiteUrl } from "@/lib/routes";
+import { hasPackageFeature, type PackageFeatureKey } from "@/config/packageConfig";
 
 const benefits = [
   "Kostenlose Ersteinschätzung für Ihre geplante PV-Anlage",
@@ -18,42 +19,56 @@ const benefits = [
   "Rückruf oder Beratungstermin einfach anfragen",
 ];
 
-const modules = [
+type HomeModule = {
+  icon: LucideIcon;
+  title: string;
+  text: string;
+  url: string;
+  feature: PackageFeatureKey;
+};
+
+const modules: HomeModule[] = [
   {
     icon: Zap,
     title: "PV-Kostenrechner",
     text: "Berechnen Sie eine erste Einschätzung zu Investition, Ersparnis und Amortisation Ihrer geplanten Photovoltaikanlage.",
     url: "/pv-rechner",
+    feature: "pvCalculator",
   },
   {
     icon: LineChart,
     title: "Stromkosten sparen",
     text: "Sehen Sie, wie stark Eigenverbrauch, Einspeisung und Ihr aktueller Strompreis die jährliche Ersparnis beeinflussen können.",
     url: "/stromkosten-sparen",
+    feature: "savingsCalculator",
   },
   {
     icon: BatteryCharging,
     title: "Speicher-Rechner",
     text: "Prüfen Sie, welche Speichergröße zu Ihrem Stromverbrauch passen kann und wann ein Batteriespeicher sinnvoll wird.",
     url: "/speicher-rechner",
+    feature: "storageCalculator",
   },
   {
     icon: FileText,
     title: "Förder-Check",
     text: "Geben Sie Bundesland, PV-Planung, Speicher und Wallbox an und lassen Sie mögliche Förderpunkte unverbindlich prüfen.",
     url: "/foerder-check",
+    feature: "fundingCheck",
   },
   {
     icon: Home,
     title: "Dach & Objekt",
     text: "Dachart, Ausrichtung, Fläche und Objektart helfen dabei, Ihre Anfrage deutlich genauer einzuschätzen.",
     url: "/angebot-anfordern",
+    feature: "offerRequest",
   },
   {
     icon: CalendarCheck,
     title: "Beratung anfragen",
     text: "Senden Sie Ihre Eckdaten ab und erhalten Sie eine persönliche Rückmeldung zur passenden PV-Lösung.",
     url: "/angebot-anfordern",
+    feature: "offerRequest",
   },
 ];
 
@@ -94,6 +109,8 @@ const webSiteSchema = {
 };
 
 export default function Index() {
+  const availableModules = modules.filter((module) => hasPackageFeature(module.feature));
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A]">
       <Helmet>
@@ -105,7 +122,7 @@ export default function Index() {
       <Header transparent />
 
       <main>
-        <section className="relative isolate overflow-hidden bg-[#F8FAFC] pt-32 pb-20 md:pt-40 md:pb-28">
+        <section className="relative isolate overflow-hidden bg-[#F8FAFC] pt-28 pb-16 md:pt-40 md:pb-28">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_82%_8%,rgba(249,115,22,0.16),transparent_30%),radial-gradient(circle_at_8%_22%,rgba(34,197,94,0.12),transparent_28%)]" />
           <div className="container relative mx-auto px-4">
             <div className="grid items-center gap-12 lg:grid-cols-[1.03fr_0.97fr]">
@@ -120,10 +137,10 @@ export default function Index() {
                   Berechnen Sie in wenigen Schritten eine erste PV-Einschätzung für Ihr Zuhause oder Gewerbe: Kosten, Ersparnis, Speicher, Wallbox und mögliche Förderpunkte — klar, modern und unverbindlich.
                 </p>
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                  <Button asChild size="lg" className="h-14 rounded-full bg-[#F97316] px-8 text-base font-extrabold text-white shadow-xl shadow-orange-500/20 hover:bg-orange-600">
+                  <Button asChild size="lg" className="h-14 w-full justify-center rounded-full bg-[#F97316] px-8 text-base font-extrabold text-white shadow-xl shadow-orange-500/20 hover:bg-orange-600 sm:w-auto">
                     <Link to="/pv-rechner">PV-Kosten berechnen <ArrowRight className="ml-2 h-5 w-5" /></Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline" className="h-14 rounded-full border-[#808080]/30 bg-white px-8 text-base font-extrabold text-[#0F172A] hover:bg-slate-50">
+                  <Button asChild size="lg" variant="outline" className="h-14 w-full justify-center rounded-full border-[#808080]/30 bg-white px-8 text-base font-extrabold text-[#0F172A] hover:bg-slate-50 sm:w-auto">
                     <Link to="/angebot-anfordern">Kostenlose Anfrage stellen</Link>
                   </Button>
                 </div>
@@ -142,8 +159,9 @@ export default function Index() {
                         <img
                           src="https://lcbmavlggundawcomznp.supabase.co/storage/v1/object/public/Startseitenbilder/pv-system-digital-perfect-solar-hightech-desktop.png"
                           alt="Modernes Solar- und Strommotiv für Photovoltaikplanung"
-                          className="h-[280px] w-full object-cover sm:h-[380px] lg:h-[500px]"
+                          className="h-[300px] w-full object-cover sm:h-[380px] lg:h-[500px]"
                           loading="eager"
+                          fetchPriority="high"
                         />
                       </picture>
                     </div>
@@ -171,7 +189,7 @@ export default function Index() {
               <p className="mt-4 text-lg text-slate-600">Kosten, Ersparnis, Speicher, Förderung und Beratung werden verständlich zusammengeführt.</p>
             </div>
             <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {modules.map((module) => (
+              {availableModules.map((module) => (
                 <Card key={module.title} className="group border border-[#808080]/20 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10">
                   <CardContent className="flex h-full flex-col p-7">
                     <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#22C55E]/10 text-[#22C55E] transition group-hover:bg-[#F97316]/10 group-hover:text-[#F97316]"><module.icon className="h-6 w-6" /></div>
@@ -206,7 +224,7 @@ export default function Index() {
               <div>
                 <div className="mb-4 inline-flex rounded-full border border-[#808080]/20 bg-white px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#F97316]">Ablauf</div>
                 <h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">Von der ersten Einschätzung zur persönlichen Beratung.</h2>
-                <p className="mt-5 text-lg leading-relaxed text-slate-600">Sie erhalten eine schnelle Orientierung und können danach direkt eine kostenlose Anfrage absenden.</p>
+                <p className="mt-5 text-lg leading-relaxed text-slate-600">Sie erhalten eine schnelle Orientierung und können danach direkt eine kostenlose Anfrage für Ihr PV-Projekt absenden.</p>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 {processSteps.map((step, index) => <Step key={step.title} number={index + 1} title={step.title} text={step.text} />)}
@@ -249,7 +267,7 @@ export default function Index() {
                 {
                   image: "https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&w=1200&q=80",
                   title: "Energie für die Zukunft",
-                  text: "PV, Speicher und Wallbox lassen sich früh gemeinsam planen und später sinnvoll erweitern.",
+                  text: "PV, Speicher und Wallbox lassen sich früh gemeinsam planen und in Zukunft sinnvoll erweitern.",
                 },
               ].map((item) => (
                 <Card key={item.title} className="overflow-hidden border border-[#808080]/20 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10">

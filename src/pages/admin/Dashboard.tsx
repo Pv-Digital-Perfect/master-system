@@ -31,7 +31,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="font-display text-3xl font-black tracking-tight text-foreground">PV Lead System Dashboard</h2>
+        <h2 className="font-display text-3xl font-black tracking-tight text-foreground">PV-Projekt Dashboard</h2>
         <p className="mt-2 text-muted-foreground">Überblick über eingehende PV-Anfragen und den aktuellen Systemstatus.</p>
       </div>
 

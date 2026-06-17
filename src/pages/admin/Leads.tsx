@@ -36,6 +36,11 @@ type PvLead = {
   source: string | null;
   lead_status: string | null;
   internal_notes: string | null;
+  email_notification_sent_at: string | null;
+  email_notification_error: string | null;
+  customer_confirmation_sent_at: string | null;
+  customer_confirmation_error: string | null;
+  last_email_attempt_at: string | null;
 };
 
 async function fetchPvLeads() {
@@ -134,7 +139,7 @@ export default function AdminLeads() {
   }
 
   function exportCsv() {
-    const headers = ["Datum", "Name", "E-Mail", "Telefon", "PLZ", "Ort", "Eigentümer", "Immobilie", "Dach", "Dachfläche", "Ausrichtung", "Dachalter", "Zählerschrank", "Verbrauch", "Speicher", "Wallbox", "Zeitrahmen", "Budget", "Quelle", "Status", "Nachricht", "Interne Notizen"];
+    const headers = ["Datum", "Name", "E-Mail", "Telefon", "PLZ", "Ort", "Eigentümer", "Immobilie", "Dach", "Dachfläche", "Ausrichtung", "Dachalter", "Zählerschrank", "Verbrauch", "Speicher", "Wallbox", "Zeitrahmen", "Budget", "Quelle", "Status", "Mail Betreiber", "Mail Kunde", "Nachricht", "Interne Notizen"];
     const rows = filteredLeads.map((lead) => [
       new Date(lead.created_at).toLocaleString("de-AT"),
       lead.full_name || "",
@@ -156,6 +161,8 @@ export default function AdminLeads() {
       humanize(lead.budget_range),
       lead.source || "",
       humanize(lead.lead_status),
+      lead.email_notification_sent_at ? "gesendet" : lead.email_notification_error ? `Fehler: ${lead.email_notification_error}` : "offen",
+      lead.customer_confirmation_sent_at ? "gesendet" : lead.customer_confirmation_error ? `Fehler: ${lead.customer_confirmation_error}` : "nicht gesendet",
       lead.message || "",
       lead.internal_notes || "",
     ]);
@@ -233,6 +240,18 @@ export default function AdminLeads() {
                         <div className="font-bold">{lead.full_name || "—"}</div>
                         <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><Mail className="h-3.5 w-3.5" />{lead.email || "—"}</div>
                         <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><Phone className="h-3.5 w-3.5" />{lead.phone || "—"}</div>
+                        <div className="mt-3 flex flex-wrap gap-1">
+                          {lead.email_notification_sent_at ? (
+                            <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">Betreiber-Mail gesendet</Badge>
+                          ) : lead.email_notification_error ? (
+                            <Badge variant="destructive" title={lead.email_notification_error}>Betreiber-Mail Fehler</Badge>
+                          ) : (
+                            <Badge variant="outline">Betreiber-Mail offen</Badge>
+                          )}
+                          {lead.customer_confirmation_sent_at ? (
+                            <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">Kunden-Mail gesendet</Badge>
+                          ) : null}
+                        </div>
                       </TableCell>
                       <TableCell>{lead.postal_code || "—"} {lead.city || ""}</TableCell>
                       <TableCell className="min-w-[190px]"><Badge variant="outline">{humanize(lead.property_type)}</Badge><div className="mt-2 text-xs text-muted-foreground">Eigentümer: {humanize(lead.ownership_status)}</div><div className="text-xs text-muted-foreground">Dach: {humanize(lead.roof_type)} · {lead.roof_area_sqm ? `${lead.roof_area_sqm} m²` : "Fläche —"}</div><div className="text-xs text-muted-foreground">Ausrichtung: {humanize(lead.roof_orientation)}</div><div className="text-xs text-muted-foreground">Zähler: {humanize(lead.meter_cabinet_status)}</div></TableCell>

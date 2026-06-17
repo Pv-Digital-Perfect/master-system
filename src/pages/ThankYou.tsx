@@ -9,7 +9,7 @@ export default function ThankYou() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950">
       <Helmet>
-        <title>Danke für deine PV-Anfrage</title>
+        <title>Danke für Ihre PV-Anfrage</title>
         <meta name="robots" content="noindex, follow" />
       </Helmet>
       <Header />
@@ -18,9 +18,9 @@ export default function ThankYou() {
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
             <CheckCircle2 className="h-10 w-10" />
           </div>
-          <h1 className="mt-6 text-4xl font-black tracking-tight">Anfrage gespeichert.</h1>
+          <h1 className="mt-6 text-4xl font-black tracking-tight">Anfrage erfolgreich übermittelt.</h1>
           <p className="mt-4 text-lg leading-relaxed text-slate-600">
-            Vielen Dank. Die PV-Anfrage wurde übermittelt und kann nun im Adminbereich weiterbearbeitet werden.
+            Vielen Dank. Ihre Angaben wurden übermittelt. Wir prüfen Ihre Anfrage und melden uns zeitnah mit einer persönlichen Rückmeldung.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild className="rounded-full bg-orange-500 px-7 font-black text-white hover:bg-orange-600"><Link to="/">Zur Startseite</Link></Button>

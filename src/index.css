@@ -76,7 +76,7 @@
 
 @layer base {
   :root {
-    /* PV-System.Digital-Perfect Theme */
+    /* PV-System Theme */
     --background: 210 40% 98%;          /* Light #F8FAFC */
     --foreground: 222 47% 11%;          /* Dark #0F172A */
     --primary: 24 95% 53%;              /* Primary #F97316 */
@@ -116,7 +116,7 @@
   }
   /* --- THEME PRESETS --- */
 
-  [data-theme="tiertarif"] {
+  [data-theme="pv"] {
     /* Alias bleibt bewusst bestehen, damit bestehende Settings nicht brechen. */
     --background: 210 40% 98%;
     --foreground: 222 47% 11%;
@@ -252,7 +252,7 @@
   .dark[data-theme="emerald"] { --primary: 160 60% 45%; --ring: 160 60% 45%; }
   .dark[data-theme="slate"] { --primary: 215 20% 65%; --ring: 215 20% 65%; }
   .dark[data-theme="gold"] { --primary: 43 74% 49%; --ring: 43 74% 49%; }
-  .dark[data-theme="tiertarif"] {
+  .dark[data-theme="pv"] {
     --background: 222 47% 11%;
     --foreground: 210 40% 98%;
     --primary: 24 95% 53%;

@@ -54,7 +54,7 @@ export default function FundingCheck() {
               <div>
                 <div className="mb-5 inline-flex rounded-full border border-[#808080]/20 bg-[#F8FAFC] px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#F97316]">Förder-Check</div>
                 <h1 className="font-display text-4xl font-extrabold tracking-[-0.045em] md:text-6xl">PV-Förderung prüfen, ohne falsche Versprechen zu machen.</h1>
-                <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">Der Förder-Check ist als sicherer Lead-Magnet gebaut: Er sammelt relevante Daten, macht aber keine fixen Förderzusagen. Genau so bleibt das System verkäuferisch stark und rechtlich sauber.</p>
+                <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">Der Förder-Check sammelt die wichtigsten Eckdaten und zeigt eine erste Orientierung. Fixe Förderzusagen sind erst nach individueller Prüfung möglich.</p>
               </div>
               <Card className="border border-[#808080]/20 bg-[#0F172A] text-white shadow-2xl shadow-slate-900/20">
                 <CardContent className="p-6 md:p-8">

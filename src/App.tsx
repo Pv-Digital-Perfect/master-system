@@ -11,8 +11,12 @@ import { useSettings } from "@/hooks/useSettings";
 import { LoadingScreen } from "./components/ui/LoadingScreen";
 import { isBotLikeRuntime } from "@/lib/runtimeFlags";
 import { CookieBanner } from "./components/layout/CookieBanner";
+import { StickyMobileCta } from "./components/layout/StickyMobileCta";
+import { SeoDefaults } from "./components/seo/SeoDefaults";
+import { PackageRoute } from "@/components/routing/PackageRoute";
 import { ScrollToTopHandler } from "@/components/ScrollToTopHandler";
 import { ScrollToAnchor } from "@/components/ScrollToAnchor";
+import { COOKIE_CONSENT_EVENT, LEGACY_COOKIE_CONSENT_EVENT, readCookieConsent } from "@/lib/cookie-consent";
 
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
@@ -40,10 +44,10 @@ const queryClient = new QueryClient();
 
 const ThemeManager = () => {
   const { data: settings, isLoading } = useSettings();
-  const activeTheme = (settings?.active_theme as string) || "tiertarif";
+  const activeTheme = (settings?.active_theme as string) || "pv";
 
   useLayoutEffect(() => {
-    const cachedTheme = localStorage.getItem("app-theme") || "tiertarif";
+    const cachedTheme = localStorage.getItem("app-theme") || "pv";
     document.documentElement.setAttribute("data-theme", cachedTheme);
   }, []);
 
@@ -63,25 +67,20 @@ const AnalyticsWrapper = () => {
 
   useEffect(() => {
     const checkConsent = () => {
-      const consentRaw = localStorage.getItem("cookie-consent");
-      if (!consentRaw) {
-        setHasConsent(false);
-        return;
-      }
-
-      try {
-        const consent = JSON.parse(consentRaw);
-        setHasConsent(consent.analytics === true);
-      } catch (e) {
-        console.error("Fehler beim Parsen des Consents", e);
-        setHasConsent(false);
-      }
+      const consent = readCookieConsent();
+      setHasConsent(consent?.analytics === true);
     };
 
     checkConsent();
-    window.addEventListener("cookie-consent-update", checkConsent);
+    window.addEventListener(COOKIE_CONSENT_EVENT, checkConsent as EventListener);
+    window.addEventListener(LEGACY_COOKIE_CONSENT_EVENT, checkConsent as EventListener);
+    window.addEventListener("storage", checkConsent);
 
-    return () => window.removeEventListener("cookie-consent-update", checkConsent);
+    return () => {
+      window.removeEventListener(COOKIE_CONSENT_EVENT, checkConsent as EventListener);
+      window.removeEventListener(LEGACY_COOKIE_CONSENT_EVENT, checkConsent as EventListener);
+      window.removeEventListener("storage", checkConsent);
+    };
   }, []);
 
   useEffect(() => {
@@ -148,19 +147,21 @@ const App = () => {
                 <CookieBanner />
                 <ScrollToTopHandler />
                 <ScrollToAnchor />
+                <SeoDefaults />
+                <StickyMobileCta />
 
                 <Suspense fallback={suspenseFallback}>
                   <Routes>
                     <Route path="/" element={<Index />} />
-                    <Route path="/pv-rechner" element={<PvCalculator />} />
-                    <Route path="/angebot-anfordern" element={<OfferRequest />} />
-                    <Route path="/photovoltaik-kosten" element={<PhotovoltaicCosts />} />
-                    <Route path="/foerderung" element={<Funding />} />
-                    <Route path="/foerder-check" element={<FundingCheck />} />
-                    <Route path="/stromkosten-sparen" element={<SavingsCalculator />} />
-                    <Route path="/speicher-rechner" element={<StorageCalculator />} />
-                    <Route path="/referenzen" element={<References />} />
-                    <Route path="/kontakt" element={<Contact />} />
+                    <Route path="/pv-rechner" element={<PackageRoute feature="pvCalculator"><PvCalculator /></PackageRoute>} />
+                    <Route path="/angebot-anfordern" element={<PackageRoute feature="offerRequest"><OfferRequest /></PackageRoute>} />
+                    <Route path="/photovoltaik-kosten" element={<PackageRoute feature="photovoltaicCosts"><PhotovoltaicCosts /></PackageRoute>} />
+                    <Route path="/foerderung" element={<PackageRoute feature="fundingOverview"><Funding /></PackageRoute>} />
+                    <Route path="/foerder-check" element={<PackageRoute feature="fundingCheck"><FundingCheck /></PackageRoute>} />
+                    <Route path="/stromkosten-sparen" element={<PackageRoute feature="savingsCalculator"><SavingsCalculator /></PackageRoute>} />
+                    <Route path="/speicher-rechner" element={<PackageRoute feature="storageCalculator"><StorageCalculator /></PackageRoute>} />
+                    <Route path="/referenzen" element={<PackageRoute feature="references"><References /></PackageRoute>} />
+                    <Route path="/kontakt" element={<PackageRoute feature="contact"><Contact /></PackageRoute>} />
                     <Route path="/danke" element={<ThankYou />} />
                     <Route path="/impressum" element={<Impressum />} />
                     <Route path="/agb" element={<AGB />} />

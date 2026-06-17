@@ -1,95 +1,79 @@
-import "@/styles/article-content.css";
+import type { ReactNode } from "react";
+import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Mail, MapPin, ShieldCheck } from "lucide-react";
-import { Helmet } from "react-helmet-async"; // KYRA FIX
+import { Mail, MapPin, ShieldCheck, FileText, Info, Phone } from "lucide-react";
+import { DEFAULT_BRAND_NAME, DEFAULT_CONTACT_EMAIL, DEFAULT_SITE_URL } from "@/lib/constants";
 import { buildAbsoluteSiteUrl } from "@/lib/routes";
 
-const Impressum = () => {
+export default function Impressum() {
   return (
-    <div className="min-h-screen flex flex-col bg-white font-sans text-slate-900">
-      {/* KYRA FIX: Unique Title für Impressum */}
+    <div className="min-h-screen bg-white text-slate-950">
       <Helmet>
-        <title>Impressum | TierTarif</title>
-        <meta name="description" content="Impressum und rechtliche Hinweise von TierTarif." />
+        <title>Impressum | {DEFAULT_BRAND_NAME}</title>
+        <meta name="description" content="Impressum, Anbieterkennzeichnung und Kontaktinformationen der Photovoltaik-Website." />
         <link rel="canonical" href={buildAbsoluteSiteUrl("/impressum")} />
-        <meta name="robots" content="index, follow" />
       </Helmet>
-
       <Header />
-
-      {/* --- HEADER BEREICH (ZENTRIERT) --- */}
-      <div className="bg-primary pt-32 pb-20 md:pt-40 md:pb-24 relative overflow-hidden">
-         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:30px_30px]" />
-         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary/90" />
-         
-         <div className="container mx-auto px-4 relative z-10 text-center">
-            <h1 className="text-4xl md:text-5xl font-display font-bold text-white mb-4 tracking-tight">
-              Impressum
-            </h1>
-            <p className="text-lg text-slate-300 max-w-2xl mx-auto">
-              Offenlegung gemäß § 25 Mediengesetz & E-Commerce-Gesetz.
-            </p>
-         </div>
-      </div>
-
-      <main className="flex-grow container mx-auto px-4 -mt-12 relative z-20 pb-20">
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-100">
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            <div className="p-8 rounded-2xl border border-slate-100 bg-slate-50 shadow-sm">
-              <h2 className="text-xl font-bold text-secondary mb-6 flex items-center gap-3">
-                <MapPin className="w-5 h-5" /> Betreiberdaten
-              </h2>
-              <div className="space-y-4 text-slate-700 leading-relaxed">
-                <p><strong className="text-primary block mb-1">Medieninhaber & Herausgeber:</strong> Media-Bro</p>
-                <p>Leonfeldnerstraße<br />4040 Linz, Österreich</p>
-                <p className="flex items-center gap-2 mt-6 text-secondary font-bold">
-                  <Mail className="w-4 h-4" /> kontakt@tiertarif.com
-                </p>
-              </div>
-            </div>
-
-            <div className="p-8 rounded-2xl border border-slate-100 bg-slate-50 shadow-sm">
-              <h2 className="text-xl font-bold text-secondary mb-6 flex items-center gap-3">
-                <ShieldCheck className="w-5 h-5" /> Rechtliches
-              </h2>
-              <div className="space-y-4 text-slate-700 leading-relaxed">
-                <p><strong className="text-primary block mb-1">Unternehmensgegenstand:</strong> Betrieb eines redaktionellen Vergleichsportals für digitale Dienstleistungen.</p>
-                <p><strong className="text-primary block mb-1">Kammerzugehörigkeit:</strong> Wirtschaftskammer Oberösterreich (WKO).</p>
-                <p><strong className="text-primary block mb-1">Redaktion:</strong> Digital-Perfect</p>
-              </div>
+      <main className="pt-[72px]">
+        <section className="bg-[#0F172A] py-16 text-white md:py-24">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-4xl text-center">
+              <div className="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-orange-200">Rechtliches</div>
+              <h1 className="text-4xl font-black tracking-tight md:text-6xl">Impressum</h1>
+              <p className="mt-5 text-lg text-slate-300">Anbieterkennzeichnung und Kontaktinformationen gemäß den gesetzlichen Informationspflichten.</p>
             </div>
           </div>
+        </section>
 
-          <div className="article-content article-content--lg article-content--legal max-w-none text-slate-700 space-y-12">
-            <section>
-              <h3 className="text-primary font-display font-bold text-2xl mb-4 underline decoration-secondary decoration-4 underline-offset-8">Haftungsausschluss & Hinweise</h3>
-              <p><strong>Transparenzhinweis (Affiliate):</strong> TierTarif finanziert sich teilweise über Affiliate-Links. Bei qualifizierten Käufen über unsere Partnerlinks erhalten wir eine Vergütung. Dies hat keinen Einfluss auf unsere Bewertungen oder den Preis für Sie.</p>
-              <p><strong>Haftung für Inhalte & Links:</strong> Trotz sorgfältiger Prüfung übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
+        <section className="container mx-auto px-4 py-16 md:py-20">
+          <div className="mx-auto max-w-5xl space-y-6">
+            <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+              <LegalCard title="Angaben zum Anbieter" icon={<FileText className="h-5 w-5" />}>
+                <p><strong>{DEFAULT_BRAND_NAME}</strong></p>
+                <p>Betreiber der Website: Digital-Perfect</p>
+                <p>Österreich</p>
+                <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-emerald-600" /><a href={`mailto:${DEFAULT_CONTACT_EMAIL}`} className="font-bold text-emerald-700 hover:text-emerald-900">{DEFAULT_CONTACT_EMAIL}</a></p>
+                <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-emerald-600" />{DEFAULT_SITE_URL}</p>
+              </LegalCard>
 
-              {/* NEU: Tarifcheck Compliance Block */}
-              <div className="mt-8 p-6 bg-slate-50 border border-slate-200 rounded-xl text-sm">
-                <h4 className="font-bold text-slate-800 mb-2">Hinweis zu Versicherungs- und Finanzvergleichen</h4>
-                <p className="mb-4">TierTarif tritt bei Versicherungs- und Finanzvergleichen ausschließlich als Tippgeber auf und ist nicht der Versicherungsvermittler.</p>
-                <p className="font-semibold mb-2">Einzelne Vergleichsrechner und Formulare werden von externen Partnern wie TARIFCHECK24 GmbH oder CHECK24 bereitgestellt.</p>
-                <p>Zollstr. 11b<br/>21465 Wentorf bei Hamburg<br/>Tel. 040 - 73098288<br/>Fax 040 - 73098289<br/>E-Mail: info@tarifcheck.de</p>
-                <div className="mt-6 w-full overflow-hidden">
-                  <iframe src="https://a.partner-versicherung.de/filestore/ad/1166/index.php?partner_id=199238" width="100%" height="300" scrolling="yes" frameBorder="0" className="border-0"></iframe>
-                </div>
-              </div>
-            </section>
+              <LegalCard title="Kontakt" icon={<Phone className="h-5 w-5" />}>
+                <p>Für Fragen zu Photovoltaik, Stromspeicher, Wallbox, Fördermöglichkeiten oder einer Anfrage nutzen Sie bitte das Kontaktformular oder die angeführte E-Mail-Adresse.</p>
+                <p>Eine schnelle Erstbewertung ist über das strukturierte Anfrageformular möglich.</p>
+              </LegalCard>
+            </div>
 
-            <section className="bg-primary text-white p-8 rounded-2xl shadow-xl">
-              <h3 className="font-display font-bold text-xl mb-4 text-white">Streitbeilegung</h3>
-              <p className="text-slate-300">Verbraucher haben die Möglichkeit, Beschwerden an die Online-Streitbeilegungsplattform der EU zu richten: <a href="http://ec.europa.eu/odr" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline font-bold">http://ec.europa.eu/odr</a>.</p>
-            </section>
+            <LegalCard title="Inhaltliche Verantwortung" icon={<ShieldCheck className="h-5 w-5" />}>
+              <p>Die Inhalte dieser Website dienen der allgemeinen Information zu Photovoltaik-Anlagen, Stromspeichern, Wallboxen, Fördermöglichkeiten und Energieeinsparung.</p>
+              <p>Berechnungen und Richtwerte stellen unverbindliche Orientierungshilfen dar. Eine verbindliche Planung, technische Prüfung, Netzanschlussprüfung oder Angebotslegung erfolgt erst nach individueller Projektprüfung.</p>
+            </LegalCard>
+
+            <LegalCard title="Haftung für Inhalte" icon={<Info className="h-5 w-5" />}>
+              <p>Die Inhalte dieser Website wurden mit Sorgfalt erstellt. Dennoch können sich technische, rechtliche, wirtschaftliche und förderbezogene Rahmenbedingungen ändern.</p>
+              <p>Für die Richtigkeit, Vollständigkeit und Aktualität aller Angaben übernehmen wir keine Gewähr. Maßgeblich sind im Einzelfall die konkrete Planung, Vertragsunterlagen und die jeweils gültigen technischen sowie rechtlichen Vorgaben.</p>
+            </LegalCard>
+
+            <LegalCard title="Haftung für externe Links" icon={<Info className="h-5 w-5" />}>
+              <p>Diese Website kann Links zu externen Websites enthalten. Auf deren Inhalte haben wir keinen Einfluss. Für externe Inhalte ist der jeweilige Anbieter oder Betreiber verantwortlich.</p>
+            </LegalCard>
+
+            <LegalCard title="Urheberrecht" icon={<FileText className="h-5 w-5" />}>
+              <p>Texte, Gestaltung, Bilder, Grafiken und sonstige Inhalte dieser Website sind urheberrechtlich geschützt, soweit sie nicht ausdrücklich anders gekennzeichnet sind.</p>
+              <p>Eine Verwendung, Vervielfältigung oder Weitergabe außerhalb gesetzlicher Erlaubnisse bedarf der vorherigen Zustimmung des jeweiligen Rechteinhabers.</p>
+            </LegalCard>
           </div>
-        </div>
+        </section>
       </main>
       <Footer />
     </div>
   );
-};
+}
 
-export default Impressum;
+function LegalCard({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) {
+  return (
+    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 className="mb-4 flex items-center gap-3 text-xl font-black text-slate-950"><span className="text-orange-500">{icon}</span>{title}</h2>
+      <div className="space-y-3 text-sm leading-relaxed text-slate-700 md:text-base">{children}</div>
+    </section>
+  );
+}

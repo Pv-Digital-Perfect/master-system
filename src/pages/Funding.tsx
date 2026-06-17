@@ -30,7 +30,7 @@ export default function Funding() {
             <div className="max-w-4xl">
               <div className="mb-5 inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-orange-200">Förderungsseite</div>
               <h1 className="font-display text-4xl font-extrabold tracking-[-0.045em] md:text-6xl">PV-Förderung richtig prüfen</h1>
-              <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-300">Förderungen ändern sich regelmäßig. Darum ist diese Seite als sichere Informations- und Leadseite gebaut: verständlich, vorsichtig formuliert und mit direktem Förder-Check.</p>
+              <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-300">Förderungen ändern sich regelmäßig. Darum erhalten Sie hier eine verständliche Orientierung mit direktem Förder-Check für Ihr geplantes PV-Projekt.</p>
               <Button asChild className="mt-8 h-14 rounded-full bg-[#F97316] px-8 font-extrabold text-white hover:bg-orange-600"><Link to="/foerder-check">Förder-Check starten <ArrowRight className="ml-2 h-5 w-5" /></Link></Button>
             </div>
           </div>
@@ -43,7 +43,7 @@ export default function Funding() {
         </section>
         <section className="bg-white py-16 md:py-24">
           <div className="container mx-auto grid gap-10 px-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            <div><div className="mb-4 inline-flex rounded-full border border-[#808080]/20 bg-[#F8FAFC] px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#22C55E]">Prüfkriterien</div><h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">Förderung ist ein Beratungshebel, kein Fixbetrag.</h2><p className="mt-5 text-lg leading-relaxed text-slate-600">Der starke Lead-Magnet ist nicht „garantierte Förderung“, sondern eine professionelle Prüfung, ob und welche Möglichkeiten aktuell infrage kommen.</p></div>
+            <div><div className="mb-4 inline-flex rounded-full border border-[#808080]/20 bg-[#F8FAFC] px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-[#22C55E]">Prüfkriterien</div><h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">Förderung ist individuell und kein fixer Pauschalbetrag.</h2><p className="mt-5 text-lg leading-relaxed text-slate-600">Entscheidend ist keine pauschale Zusage, sondern eine sorgfältige Prüfung, ob und welche Möglichkeiten aktuell infrage kommen.</p></div>
             <div className="grid gap-3 sm:grid-cols-2">
               {fundingFactors.map((item) => <div key={item} className="flex items-center gap-3 rounded-2xl border border-[#808080]/20 bg-[#F8FAFC] p-4 text-sm font-bold"><MapPin className="h-5 w-5 shrink-0 text-[#F97316]" />{item}</div>)}
             </div>
@@ -52,7 +52,7 @@ export default function Funding() {
         <section className="container mx-auto px-4 py-16 md:py-24">
           <div className="rounded-[2rem] border border-[#808080]/20 bg-[#0F172A] p-8 text-white md:p-12">
             <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
-              <div><div className="mb-4 flex items-center gap-2 text-sm font-extrabold uppercase tracking-[0.18em] text-green-200"><ShieldCheck className="h-4 w-4" /> sauberer Leadflow</div><h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">Förderung direkt als Anfrage nutzen.</h2><p className="mt-4 text-slate-300">Der Förder-Check sammelt die relevanten Daten und führt den Nutzer in eine Beratung, ohne rechtlich riskante Aussagen zu machen.</p></div>
+              <div><div className="mb-4 flex items-center gap-2 text-sm font-extrabold uppercase tracking-[0.18em] text-green-200"><ShieldCheck className="h-4 w-4" /> strukturierte Anfrage</div><h2 className="font-display text-3xl font-extrabold tracking-[-0.04em] md:text-5xl">Förderung direkt prüfen lassen.</h2><p className="mt-4 text-slate-300">Der Förder-Check sammelt die wichtigsten Eckdaten und erleichtert eine persönliche Einschätzung, ohne pauschale Förderzusagen zu machen.</p></div>
               <div className="flex flex-col gap-3 lg:justify-self-end"><Button asChild size="lg" className="h-14 rounded-full bg-[#F97316] px-8 font-extrabold text-white hover:bg-orange-600"><Link to="/foerder-check">Förder-Check öffnen</Link></Button><Button asChild size="lg" variant="outline" className="h-14 rounded-full border-white/20 bg-white/10 px-8 font-extrabold text-white hover:bg-white/20"><Link to="/angebot-anfordern">Anfrage senden</Link></Button></div>
             </div>
           </div>

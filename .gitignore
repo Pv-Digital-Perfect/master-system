@@ -31,3 +31,5 @@ dist-ssr
 # Security & Keys
 service-account.json
 *-key.json
+# Lokale Archivdateien
+*.zip
